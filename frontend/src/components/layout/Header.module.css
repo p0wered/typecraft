@@ -1,0 +1,63 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0;
+  gap: 2rem;
+}
+
+.logo {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.logo:hover {
+  color: var(--text-primary);
+}
+
+.logoAccent {
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.navLink {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.active {
+  color: var(--accent);
+}
+
+.active:hover {
+  color: var(--accent);
+}
+
+.actions {
+  margin-left: auto;
+}
+
+.authLink {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.authLink:hover {
+  color: var(--text-primary);
+}
