@@ -5,6 +5,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
 }
 
 .main {
@@ -21,7 +22,22 @@
 }
 
 .footerText {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bgGlow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  filter: var(--blur-lg);
 }

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  max-width: 400px;
+  max-width: 420px;
   margin: 0 auto;
 }
 
@@ -14,23 +14,38 @@
   color: var(--accent);
 }
 
+.card {
+  width: 100%;
+  background-color: var(--bg-surface);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .form {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  width: 100%;
 }
 
 .input {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   padding: 0.75rem 1rem;
-  background-color: var(--bg-secondary);
-  border: 2px solid transparent;
+  background-color: var(--bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   outline: none;
-  transition: border-color var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .input::placeholder {
@@ -39,22 +54,26 @@
 
 .input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .submitBtn {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   padding: 0.75rem;
-  background-color: var(--accent);
-  color: var(--bg-primary);
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: #fff;
   border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
-  transition: background-color var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .submitBtn:hover {
-  background-color: var(--accent-hover);
+  opacity: 0.9;
+  box-shadow: var(--shadow-glow);
 }
 
 .toggleBtn {
@@ -63,9 +82,10 @@
   color: var(--text-secondary);
   background: none;
   border: none;
+  text-align: center;
   transition: color var(--transition-fast);
 }
 
 .toggleBtn:hover {
-  color: var(--text-primary);
+  color: var(--accent);
 }

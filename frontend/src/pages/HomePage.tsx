@@ -1,9 +1,16 @@
+import { motion } from "framer-motion";
+import { staggerContainer, fadeSlideUp, fadeScale } from "../utils/motion";
 import styles from "./HomePage.module.css";
 
 export function HomePage() {
   return (
-    <div className={styles.container}>
-      <div className={styles.modeBar}>
+    <motion.div
+      className={styles.container}
+      variants={staggerContainer}
+      initial="initial"
+      animate="animate"
+    >
+      <motion.div className={styles.modeBar} variants={fadeScale}>
         <div className={styles.modeGroup}>
           <button className={`${styles.modeBtn} ${styles.active}`}>words</button>
           <button className={styles.modeBtn}>time</button>
@@ -16,13 +23,13 @@ export function HomePage() {
           <button className={styles.optionBtn}>50</button>
           <button className={styles.optionBtn}>100</button>
         </div>
-      </div>
+      </motion.div>
 
-      <div className={styles.typingArea}>
+      <motion.div className={styles.typingArea} variants={fadeSlideUp}>
         <p className={styles.placeholder}>
           Start typing to begin the test...
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

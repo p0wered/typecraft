@@ -8,6 +8,7 @@
   <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React" />
   <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Framer_Motion-12-E916A3?logo=framer&logoColor=white" alt="Framer Motion" />
   <img src="https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white" alt="Express" />
   <img src="https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
 </p>
@@ -39,7 +40,7 @@
 
 | Слой | Технологии |
 |:-----|:-----------|
-| Frontend | React 19, TypeScript, Vite, CSS Modules, React Router, Zustand, Recharts |
+| Frontend | React 19, TypeScript, Vite, CSS Modules, React Router, Zustand, Framer Motion, Recharts |
 | Backend | Node.js, Express, TypeScript, Drizzle ORM, better-sqlite3, Zod |
 | Аутентификация | JWT (jsonwebtoken + bcryptjs) |
 | Инструменты | npm workspaces, ESLint, Prettier, Vitest, concurrently |

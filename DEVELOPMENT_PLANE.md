@@ -15,6 +15,7 @@
 | CSS Modules | Стилизация (изолированные стили) |
 | React Router v7 | Маршрутизация |
 | Zustand | Стейт-менеджмент |
+| Framer Motion | Анимации (page transitions, layout, микровзаимодействия) |
 | Recharts | Графики статистики |
 
 ### Backend
