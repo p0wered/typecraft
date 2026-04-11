@@ -9,3 +9,4 @@ build/
 *.log
 coverage/
 .vite/
+.idea
