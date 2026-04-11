@@ -1,16 +1,19 @@
-<p align="center">
-  <b><code>~ typecraft ~</code></b>
-  <br/>
-  <i>Веб-сервис для практики быстрой печати и печати вслепую</i>
-</p>
+<div>
+  <p style="font-size: 32px; font-weight: 900">
+    TypeCraft
+  </p>
+  <p class="font-size: 18px; font-weight: 600">
+    Веб-сервис для практики быстрой печати и печати вслепую
+  </p>
+</div>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/Framer_Motion-12-E916A3?logo=framer&logoColor=white" alt="Framer Motion" />
-  <img src="https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white" alt="Express" />
-  <img src="https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white" alt="SQLite" />
+<p>
+  <img src="https://img.shields.io/badge/React-191919.svg?logo=react&logoColor=77C4DB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-191919?logo=typescript&logoColor=3178c6" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-191919?logo=vite&logoColor=#8C58EE" alt="Vite" />
+  <img src="https://img.shields.io/badge/Framer_Motion-191919?logo=framer&logoColor=FDF45B" alt="Framer Motion" />
+  <img src="https://img.shields.io/badge/Express.js-191919.svg?logo=express&logoColor=A8CE4E" alt="Express" />
+  <img src="https://img.shields.io/badge/SQLite-191919.svg?logo=sqlite&logoColor=1C415B" alt="SQLite" />
 </p>
 
 ---
