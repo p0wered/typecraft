@@ -1,5 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuthStore } from "../../store/authStore";
 import styles from "./Header.module.css";
 
 const NAV_ITEMS = [
@@ -13,7 +14,11 @@ const headerVariants = {
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeOut" as const, staggerChildren: 0.06 },
+    transition: {
+      duration: 0.4,
+      ease: "easeOut" as const,
+      staggerChildren: 0.06,
+    },
   },
 };
 
@@ -24,6 +29,15 @@ const itemVariants = {
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const logout = useAuthStore((s) => s.logout);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <motion.header
@@ -57,9 +71,39 @@ export function Header() {
         ))}
       </nav>
       <motion.div className={styles.actions} variants={itemVariants}>
-        <Link to="/login" className={styles.authLink}>
-          login
-        </Link>
+        <AnimatePresence mode="wait" initial={false}>
+          {isAuthenticated && user ? (
+            <motion.div
+              key="authed"
+              className={styles.userGroup}
+              initial={{ opacity: 0, x: 6 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 6 }}
+              transition={{ duration: 0.18 }}
+            >
+              <span className={styles.username}>{user.username}</span>
+              <button
+                className={styles.logoutBtn}
+                onClick={handleLogout}
+                title="log out"
+              >
+                logout
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="guest"
+              initial={{ opacity: 0, x: 6 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 6 }}
+              transition={{ duration: 0.18 }}
+            >
+              <Link to="/login" className={styles.authLink}>
+                login
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </motion.header>
   );

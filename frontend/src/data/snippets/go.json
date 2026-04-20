@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "hello http",
+    "length": "short",
+    "code": "package main\n\nimport (\n  \"fmt\"\n  \"net/http\"\n)\n\nfunc main() {\n  http.HandleFunc(\"/\", func(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintln(w, \"hello, world\")\n  })\n  http.ListenAndServe(\":8080\", nil)\n}"
+  },
+  {
+    "id": 2,
+    "title": "reverse string",
+    "length": "short",
+    "code": "package main\n\nimport \"fmt\"\n\nfunc reverse(s string) string {\n  runes := []rune(s)\n  for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {\n    runes[i], runes[j] = runes[j], runes[i]\n  }\n  return string(runes)\n}\n\nfunc main() {\n  fmt.Println(reverse(\"hello\"))\n}"
+  },
+  {
+    "id": 3,
+    "title": "worker pool",
+    "length": "medium",
+    "code": "package main\n\nimport (\n  \"fmt\"\n  \"sync\"\n)\n\nfunc worker(id int, jobs <-chan int, results chan<- int, wg *sync.WaitGroup) {\n  defer wg.Done()\n  for j := range jobs {\n    results <- j * 2\n    fmt.Printf(\"worker %d done %d\\n\", id, j)\n  }\n}"
+  },
+  {
+    "id": 4,
+    "title": "json handler",
+    "length": "medium",
+    "code": "type User struct {\n  ID    int    `json:\"id\"`\n  Name  string `json:\"name\"`\n  Email string `json:\"email\"`\n}\n\nfunc getUser(w http.ResponseWriter, r *http.Request) {\n  user := User{ID: 1, Name: \"alice\", Email: \"alice@example.com\"}\n  w.Header().Set(\"Content-Type\", \"application/json\")\n  if err := json.NewEncoder(w).Encode(user); err != nil {\n    http.Error(w, err.Error(), http.StatusInternalServerError)\n  }\n}"
+  },
+  {
+    "id": 5,
+    "title": "lru cache",
+    "length": "long",
+    "code": "package cache\n\nimport \"container/list\"\n\ntype LRU struct {\n  capacity int\n  items    map[string]*list.Element\n  order    *list.List\n}\n\ntype entry struct {\n  key   string\n  value any\n}\n\nfunc New(capacity int) *LRU {\n  return &LRU{\n    capacity: capacity,\n    items:    make(map[string]*list.Element),\n    order:    list.New(),\n  }\n}\n\nfunc (c *LRU) Get(key string) (any, bool) {\n  if e, ok := c.items[key]; ok {\n    c.order.MoveToFront(e)\n    return e.Value.(*entry).value, true\n  }\n  return nil, false\n}"
+  }
+]

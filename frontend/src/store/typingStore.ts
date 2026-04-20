@@ -15,16 +15,42 @@ interface TypingState {
   reset: () => void;
 }
 
+const DEFAULT_MODE_VALUE: Record<TypingMode, string> = {
+  words: "25",
+  time: "30",
+  quote: "medium",
+  code: "javascript",
+};
+
+const VALID_MODE_VALUES: Record<TypingMode, readonly string[]> = {
+  words: ["10", "25", "50", "100"],
+  time: ["15", "30", "60", "120"],
+  quote: ["short", "medium", "long"],
+  code: ["javascript", "typescript", "python", "go", "rust"],
+};
+
 export const useTypingStore = create<TypingState>()((set) => ({
   mode: "words",
   modeValue: "25",
   typingLanguage: "en",
   isActive: false,
   isFinished: false,
-  setMode: (mode) => set({ mode, isActive: false, isFinished: false }),
+  setMode: (mode) =>
+    set((state) => {
+      const nextValue = VALID_MODE_VALUES[mode].includes(state.modeValue)
+        ? state.modeValue
+        : DEFAULT_MODE_VALUE[mode];
+      return {
+        mode,
+        modeValue: nextValue,
+        isActive: false,
+        isFinished: false,
+      };
+    }),
   setModeValue: (modeValue) =>
     set({ modeValue, isActive: false, isFinished: false }),
-  setTypingLanguage: (typingLanguage) => set({ typingLanguage }),
+  setTypingLanguage: (typingLanguage) =>
+    set({ typingLanguage, isActive: false, isFinished: false }),
   start: () => set({ isActive: true, isFinished: false }),
   finish: () => set({ isActive: false, isFinished: true }),
   reset: () => set({ isActive: false, isFinished: false }),

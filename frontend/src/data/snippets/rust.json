@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "hello",
+    "length": "short",
+    "code": "fn main() {\n  let name = \"world\";\n  println!(\"hello, {name}!\");\n}"
+  },
+  {
+    "id": 2,
+    "title": "fibonacci",
+    "length": "short",
+    "code": "fn fib(n: u32) -> u64 {\n  let (mut a, mut b) = (0u64, 1u64);\n  for _ in 0..n {\n    let next = a + b;\n    a = b;\n    b = next;\n  }\n  a\n}"
+  },
+  {
+    "id": 3,
+    "title": "option result",
+    "length": "medium",
+    "code": "fn find_user(id: u32) -> Result<String, String> {\n  let users = vec![\"alice\", \"bob\", \"carol\"];\n  users\n    .get(id as usize)\n    .map(|name| name.to_string())\n    .ok_or_else(|| format!(\"user {id} not found\"))\n}\n\nfn main() {\n  match find_user(1) {\n    Ok(name) => println!(\"found: {name}\"),\n    Err(e) => eprintln!(\"error: {e}\"),\n  }\n}"
+  },
+  {
+    "id": 4,
+    "title": "iterator chain",
+    "length": "medium",
+    "code": "fn sum_of_squares(numbers: &[i32]) -> i32 {\n  numbers\n    .iter()\n    .filter(|n| **n > 0)\n    .map(|n| n * n)\n    .sum()\n}\n\nfn main() {\n  let nums = [1, -2, 3, -4, 5];\n  let total = sum_of_squares(&nums);\n  println!(\"sum = {total}\");\n}"
+  }
+]

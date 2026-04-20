@@ -4,8 +4,13 @@ import { HomePage } from "./pages/HomePage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { LoginPage } from "./pages/LoginPage";
+import { useAuthBootstrap } from "./hooks/useAuthBootstrap";
+import { useSettingsSync } from "./hooks/useSettingsSync";
 
 export function App() {
+  useAuthBootstrap();
+  useSettingsSync();
+
   return (
     <Routes>
       <Route element={<Layout />}>

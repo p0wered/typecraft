@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "fizzbuzz",
+    "length": "short",
+    "code": "def fizzbuzz(n):\n  for i in range(1, n + 1):\n    if i % 15 == 0:\n      print('FizzBuzz')\n    elif i % 3 == 0:\n      print('Fizz')\n    elif i % 5 == 0:\n      print('Buzz')\n    else:\n      print(i)"
+  },
+  {
+    "id": 2,
+    "title": "binary search",
+    "length": "short",
+    "code": "def binary_search(arr, target):\n  low, high = 0, len(arr) - 1\n  while low <= high:\n    mid = (low + high) // 2\n    if arr[mid] == target:\n      return mid\n    if arr[mid] < target:\n      low = mid + 1\n    else:\n      high = mid - 1\n  return -1"
+  },
+  {
+    "id": 3,
+    "title": "word counter",
+    "length": "medium",
+    "code": "from collections import Counter\n\ndef top_words(text, n=5):\n  words = [w.lower() for w in text.split() if w.isalpha()]\n  counter = Counter(words)\n  return counter.most_common(n)\n\nif __name__ == '__main__':\n  sample = 'the quick brown fox jumps over the lazy dog'\n  print(top_words(sample, 3))"
+  },
+  {
+    "id": 4,
+    "title": "retry decorator",
+    "length": "medium",
+    "code": "import time\nfrom functools import wraps\n\ndef retry(times=3, delay=0.5):\n  def decorator(fn):\n    @wraps(fn)\n    def wrapper(*args, **kwargs):\n      for attempt in range(times):\n        try:\n          return fn(*args, **kwargs)\n        except Exception:\n          if attempt == times - 1:\n            raise\n          time.sleep(delay * (2 ** attempt))\n    return wrapper\n  return decorator"
+  },
+  {
+    "id": 5,
+    "title": "priority queue",
+    "length": "long",
+    "code": "import heapq\nfrom dataclasses import dataclass, field\nfrom typing import Any\n\n@dataclass(order=True)\nclass PrioritizedItem:\n  priority: int\n  item: Any = field(compare=False)\n\nclass PriorityQueue:\n  def __init__(self):\n    self._items = []\n    self._index = 0\n\n  def push(self, item, priority):\n    heapq.heappush(self._items, PrioritizedItem(priority, item))\n    self._index += 1\n\n  def pop(self):\n    if not self._items:\n      raise IndexError('empty queue')\n    return heapq.heappop(self._items).item"
+  }
+]

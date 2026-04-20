@@ -25,4 +25,9 @@
 .cardText {
   font-size: 1rem;
   color: var(--text-secondary);
+  text-align: center;
+}
+
+.accent {
+  color: var(--accent);
 }

@@ -1,0 +1,79 @@
+.word {
+  display: inline-flex;
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+.char {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  transition: color 80ms ease;
+  position: relative;
+  display: inline-block;
+}
+
+.correct {
+  color: var(--text-primary);
+}
+
+.incorrect {
+  color: var(--error);
+}
+
+.extra {
+  color: var(--error-extra);
+}
+
+.untyped {
+  color: var(--text-secondary);
+}
+
+.caret::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: var(--caret);
+  border-radius: 1px;
+  animation: blink 1s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.caretAfter::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: var(--caret);
+  border-radius: 1px;
+  animation: blink 1s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.endCaret {
+  display: inline-block;
+  position: relative;
+  width: 2px;
+  margin-left: 1px;
+}
+
+.endCaret::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 2px;
+  background: var(--caret);
+  border-radius: 1px;
+  animation: blink 1s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

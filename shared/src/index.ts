@@ -21,4 +21,10 @@ export type {
   InterfaceLanguage,
 } from "./settings";
 
-export type { Quote, CodeSnippet, ProgrammingLanguage } from "./content";
+export type {
+  Quote,
+  CodeSnippet,
+  ProgrammingLanguage,
+  QuoteLanguage,
+  ContentLength,
+} from "./content";

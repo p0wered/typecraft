@@ -3,20 +3,23 @@ export type ProgrammingLanguage =
   | "typescript"
   | "python"
   | "go"
-  | "rust"
-  | "java"
-  | "cpp";
+  | "rust";
+
+export type ContentLength = "short" | "medium" | "long";
+
+export type QuoteLanguage = "en" | "ru";
 
 export interface Quote {
   id: number;
   text: string;
   source: string;
-  length: "short" | "medium" | "long";
+  language: QuoteLanguage;
+  length: ContentLength;
 }
 
 export interface CodeSnippet {
   id: number;
-  code: string;
-  language: ProgrammingLanguage;
   title: string;
+  code: string;
+  length: ContentLength;
 }

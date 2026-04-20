@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "result type",
+    "length": "short",
+    "code": "type Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nconst ok = <T>(value: T): Result<T> => ({ ok: true, value });\nconst err = <E>(error: E): Result<never, E> => ({ ok: false, error });"
+  },
+  {
+    "id": 2,
+    "title": "memoize",
+    "length": "short",
+    "code": "function memoize<A extends unknown[], R>(fn: (...args: A) => R): (...args: A) => R {\n  const cache = new Map<string, R>();\n  return (...args: A): R => {\n    const key = JSON.stringify(args);\n    if (!cache.has(key)) cache.set(key, fn(...args));\n    return cache.get(key) as R;\n  };\n}"
+  },
+  {
+    "id": 3,
+    "title": "event emitter",
+    "length": "medium",
+    "code": "type Listener<T> = (value: T) => void;\n\nclass Emitter<T> {\n  private listeners = new Set<Listener<T>>();\n\n  on(listener: Listener<T>): () => void {\n    this.listeners.add(listener);\n    return () => this.listeners.delete(listener);\n  }\n\n  emit(value: T): void {\n    for (const listener of this.listeners) listener(value);\n  }\n}"
+  },
+  {
+    "id": 4,
+    "title": "pipe",
+    "length": "medium",
+    "code": "function pipe<A>(value: A): A;\nfunction pipe<A, B>(value: A, fn1: (a: A) => B): B;\nfunction pipe<A, B, C>(value: A, fn1: (a: A) => B, fn2: (b: B) => C): C;\nfunction pipe(value: unknown, ...fns: Array<(x: unknown) => unknown>): unknown {\n  return fns.reduce((acc, fn) => fn(acc), value);\n}"
+  },
+  {
+    "id": 5,
+    "title": "lru cache",
+    "length": "long",
+    "code": "class LRUCache<K, V> {\n  private readonly max: number;\n  private readonly map = new Map<K, V>();\n\n  constructor(max: number) {\n    this.max = max;\n  }\n\n  get(key: K): V | undefined {\n    const value = this.map.get(key);\n    if (value === undefined) return undefined;\n    this.map.delete(key);\n    this.map.set(key, value);\n    return value;\n  }\n\n  set(key: K, value: V): void {\n    if (this.map.has(key)) this.map.delete(key);\n    else if (this.map.size >= this.max) {\n      const first = this.map.keys().next().value;\n      if (first !== undefined) this.map.delete(first);\n    }\n    this.map.set(key, value);\n  }\n}"
+  }
+]

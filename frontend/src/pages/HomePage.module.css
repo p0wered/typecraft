@@ -2,69 +2,61 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3rem;
+  gap: 2.5rem;
+  padding: 2rem 0;
 }
 
-.modeBar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background-color: var(--bg-surface);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  padding: 0.5rem 1.25rem;
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: var(--shadow-sm);
-}
-
-.modeGroup {
-  display: flex;
-  gap: 0.125rem;
-}
-
-.separator {
-  width: 1px;
-  height: 1.25rem;
-  background: linear-gradient(to bottom, transparent, var(--text-secondary), transparent);
-  opacity: 0.3;
-}
-
-.modeBtn,
-.optionBtn {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  padding: 0.375rem 0.75rem;
-  border-radius: var(--radius-sm);
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast);
-}
-
-.modeBtn:hover,
-.optionBtn:hover {
-  color: var(--text-primary);
-  background-color: var(--accent-soft);
-}
-
-.modeBtn.active,
-.optionBtn.active {
-  color: var(--accent);
-}
-
-.typingArea {
+.fullWidth {
   width: 100%;
-  min-height: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.testWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+}
+
+.topBar {
+  min-height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.placeholder {
+.typingArea {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.meta {
   font-family: var(--font-mono);
-  font-size: 1.5rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.hint kbd {
+  font-family: var(--font-mono);
+  background-color: var(--bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0.45rem;
+  margin: 0 0.15rem;
+  font-size: 0.75rem;
+  color: var(--text-primary);
 }

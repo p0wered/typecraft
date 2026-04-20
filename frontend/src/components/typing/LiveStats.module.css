@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  min-height: 2.5rem;
+}
+
+.primary {
+  font-size: 2rem;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.secondary {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}

@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "text": "The only way to do great work is to love what you do.",
+    "source": "Steve Jobs",
+    "language": "en",
+    "length": "short"
+  },
+  {
+    "id": 2,
+    "text": "Simplicity is the ultimate sophistication.",
+    "source": "Leonardo da Vinci",
+    "language": "en",
+    "length": "short"
+  },
+  {
+    "id": 3,
+    "text": "Stay hungry, stay foolish.",
+    "source": "Stewart Brand",
+    "language": "en",
+    "length": "short"
+  },
+  {
+    "id": 4,
+    "text": "Talk is cheap. Show me the code.",
+    "source": "Linus Torvalds",
+    "language": "en",
+    "length": "short"
+  },
+  {
+    "id": 5,
+    "text": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+    "source": "Martin Fowler",
+    "language": "en",
+    "length": "medium"
+  },
+  {
+    "id": 6,
+    "text": "First, solve the problem. Then, write the code. Code is like humor. When you have to explain it, it is bad.",
+    "source": "John Johnson",
+    "language": "en",
+    "length": "medium"
+  },
+  {
+    "id": 7,
+    "text": "Programming is the art of telling another human being what one wants the computer to do. Readability counts more than cleverness.",
+    "source": "Donald Knuth",
+    "language": "en",
+    "length": "medium"
+  },
+  {
+    "id": 8,
+    "text": "The best way to predict the future is to invent it. The people who are crazy enough to think they can change the world are the ones who do.",
+    "source": "Alan Kay",
+    "language": "en",
+    "length": "medium"
+  },
+  {
+    "id": 9,
+    "text": "There are only two hard things in computer science: cache invalidation and naming things. Everything else is merely a function of time, patience, and a willingness to read documentation carefully.",
+    "source": "Phil Karlton",
+    "language": "en",
+    "length": "long"
+  },
+  {
+    "id": 10,
+    "text": "Software is a great combination of artistry and engineering. It requires imagination to create something that did not exist before, and discipline to make it reliable, maintainable, and usable by people who did not build it.",
+    "source": "Bill Gates",
+    "language": "en",
+    "length": "long"
+  },
+  {
+    "id": 11,
+    "text": "The most damaging phrase in the language is: it has always been done this way. Progress demands that we question assumptions, experiment with new ideas, and accept that what worked yesterday may not be the best path forward tomorrow.",
+    "source": "Grace Hopper",
+    "language": "en",
+    "length": "long"
+  },
+  {
+    "id": 12,
+    "text": "Не бойтесь совершенства. Вам его никогда не достичь.",
+    "source": "Сальвадор Дали",
+    "language": "ru",
+    "length": "short"
+  },
+  {
+    "id": 13,
+    "text": "Самое лучшее — простое, а простое — самое трудное.",
+    "source": "Народная мудрость",
+    "language": "ru",
+    "length": "short"
+  },
+  {
+    "id": 14,
+    "text": "Код пишется людьми и для людей. Машине всё равно, главное — чтобы он работал и был понятен тем, кто придёт после.",
+    "source": "Неизвестный",
+    "language": "ru",
+    "length": "medium"
+  },
+  {
+    "id": 15,
+    "text": "Программирование — это искусство объяснить другому человеку, чего именно ты хочешь от компьютера, при помощи языка, который понимают оба.",
+    "source": "Дональд Кнут",
+    "language": "ru",
+    "length": "medium"
+  },
+  {
+    "id": 16,
+    "text": "Время, потраченное на понимание задачи, никогда не бывает потерянным. Наоборот — каждый час, проведённый за обдумыванием, экономит десять часов, которые иначе ушли бы на переписывание кода и исправление собственных ошибок.",
+    "source": "Народная мудрость",
+    "language": "ru",
+    "length": "long"
+  }
+]

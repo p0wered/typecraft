@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "debounce",
+    "length": "short",
+    "code": "function debounce(fn, delay) {\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn(...args), delay);\n  };\n}"
+  },
+  {
+    "id": 2,
+    "title": "fibonacci",
+    "length": "short",
+    "code": "function fib(n) {\n  if (n < 2) return n;\n  let a = 0, b = 1;\n  for (let i = 2; i <= n; i++) {\n    [a, b] = [b, a + b];\n  }\n  return b;\n}"
+  },
+  {
+    "id": 3,
+    "title": "deep clone",
+    "length": "medium",
+    "code": "function clone(value) {\n  if (value === null || typeof value !== 'object') return value;\n  if (Array.isArray(value)) return value.map(clone);\n  const result = {};\n  for (const key of Object.keys(value)) {\n    result[key] = clone(value[key]);\n  }\n  return result;\n}"
+  },
+  {
+    "id": 4,
+    "title": "quicksort",
+    "length": "medium",
+    "code": "function quicksort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = [];\n  const right = [];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] < pivot) left.push(arr[i]);\n    else right.push(arr[i]);\n  }\n  return [...quicksort(left), pivot, ...quicksort(right)];\n}"
+  },
+  {
+    "id": 5,
+    "title": "fetch with retry",
+    "length": "long",
+    "code": "async function fetchWithRetry(url, options = {}, retries = 3) {\n  for (let attempt = 0; attempt < retries; attempt++) {\n    try {\n      const response = await fetch(url, options);\n      if (!response.ok) throw new Error(`HTTP ${response.status}`);\n      return await response.json();\n    } catch (error) {\n      if (attempt === retries - 1) throw error;\n      await new Promise((r) => setTimeout(r, 2 ** attempt * 100));\n    }\n  }\n}"
+  }
+]

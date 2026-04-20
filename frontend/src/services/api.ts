@@ -1,24 +1,40 @@
 const BASE_URL = "/api";
 
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
+type UnauthorizedHandler = () => void;
+
 class ApiClient {
   private token: string | null = null;
+  private onUnauthorized: UnauthorizedHandler | null = null;
 
   setToken(token: string | null) {
     this.token = token;
+  }
+
+  setUnauthorizedHandler(handler: UnauthorizedHandler | null) {
+    this.onUnauthorized = handler;
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
 
     if (this.token) {
-      (headers as Record<string, string>)["Authorization"] =
-        `Bearer ${this.token}`;
+      headers["Authorization"] = `Bearer ${this.token}`;
     }
 
     const response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -27,13 +43,23 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(
-        error.message || `Request failed with status ${response.status}`,
-      );
+      const data = await response.json().catch(() => ({}));
+      const message =
+        (data as { message?: string }).message ??
+        `Request failed with status ${response.status}`;
+
+      if (response.status === 401 && this.onUnauthorized) {
+        this.onUnauthorized();
+      }
+
+      throw new ApiError(response.status, message);
     }
 
-    return response.json();
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    return response.json() as Promise<T>;
   }
 
   get<T>(endpoint: string) {
@@ -52,6 +78,10 @@ class ApiClient {
       method: "PUT",
       body: JSON.stringify(data),
     });
+  }
+
+  delete<T>(endpoint: string) {
+    return this.request<T>(endpoint, { method: "DELETE" });
   }
 }
 
