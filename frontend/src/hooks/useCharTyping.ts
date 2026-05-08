@@ -4,7 +4,9 @@ import {
   calculateConsistency,
   calculateRawWpm,
   calculateWpm,
+  recordKeyMistake,
 } from "../utils/typing";
+import type { KeyMistakes } from "../utils/typing";
 import { useSettingsStore } from "../store/settingsStore";
 import { playKeySound } from "../utils/sound";
 import type { TypingStats, TypingTestResult, WpmSample } from "./useTyping";
@@ -20,15 +22,15 @@ function computeCharStats(
   isFinished: boolean,
   wpmHistory: WpmSample[],
   durationSec: number,
+  incorrectAttempts: number,
+  extraAttempts: number,
 ): TypingStats {
   let correct = 0;
-  let incorrect = 0;
   for (let i = 0; i < typed.length; i++) {
     if (typed[i] === target[i]) correct++;
-    else incorrect++;
   }
   const missed = isFinished ? 0 : Math.max(0, target.length - typed.length);
-  const typedTotal = typed.length;
+  const typedTotal = correct + incorrectAttempts + extraAttempts;
 
   return {
     wpm: calculateWpm(correct, durationSec),
@@ -36,8 +38,8 @@ function computeCharStats(
     accuracy: calculateAccuracy(correct, typedTotal),
     consistency: calculateConsistency(wpmHistory.map((s) => s.wpm)),
     correctChars: correct,
-    incorrectChars: incorrect,
-    extraChars: 0,
+    incorrectChars: incorrectAttempts,
+    extraChars: extraAttempts,
     missedChars: missed,
   };
 }
@@ -52,6 +54,9 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
   const startedAtRef = useRef<number | null>(null);
   const finishedRef = useRef(false);
   const onFinishRef = useRef(onFinish);
+  const incorrectAttemptsRef = useRef(0);
+  const extraAttemptsRef = useRef(0);
+  const keyMistakesRef = useRef<KeyMistakes>({});
   onFinishRef.current = onFinish;
 
   const reset = useCallback(() => {
@@ -62,6 +67,9 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
     setWpmHistory([]);
     startedAtRef.current = null;
     finishedRef.current = false;
+    incorrectAttemptsRef.current = 0;
+    extraAttemptsRef.current = 0;
+    keyMistakesRef.current = {};
   }, []);
 
   const finish = useCallback(
@@ -80,11 +88,14 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
           true,
           history,
           Math.max(duration, 0.01),
+          incorrectAttemptsRef.current,
+          extraAttemptsRef.current,
         );
         onFinishRef.current({
           ...stats,
           testDurationSec: Math.max(1, Math.round(duration)),
           wpmHistory: history,
+          keyMistakes: { ...keyMistakesRef.current },
         });
         return history;
       });
@@ -106,7 +117,10 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
           if (currentTyped[i] === target[i]) correct++;
         }
         const wpm = calculateWpm(correct, elapsed);
-        const rawWpm = calculateRawWpm(currentTyped.length, elapsed);
+        const rawWpm = calculateRawWpm(
+          correct + incorrectAttemptsRef.current + extraAttemptsRef.current,
+          elapsed,
+        );
         setWpmHistory((h) => [...h, { sec: Math.round(elapsed), wpm, rawWpm }]);
         return currentTyped;
       });
@@ -149,6 +163,13 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
           if (prev.length >= target.length) return prev;
           const room = target.length - prev.length;
           const next = prev + "  ".slice(0, Math.min(2, room));
+          for (let i = prev.length; i < next.length; i++) {
+            const expectedChar = target[i];
+            if (expectedChar !== " ") {
+              incorrectAttemptsRef.current += 1;
+              recordKeyMistake(keyMistakesRef.current, expectedChar, " ");
+            }
+          }
           if (next.length >= target.length) {
             setTimeout(() => finish(next), 0);
           }
@@ -161,6 +182,14 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
 
       setTyped((prev) => {
         if (prev.length >= target.length) return prev;
+        const expectedChar = target[prev.length];
+        if (expectedChar === undefined) {
+          extraAttemptsRef.current += 1;
+          recordKeyMistake(keyMistakesRef.current, undefined, appended);
+        } else if (appended !== expectedChar) {
+          incorrectAttemptsRef.current += 1;
+          recordKeyMistake(keyMistakesRef.current, expectedChar, appended);
+        }
         const next = prev + appended;
         if (next.length >= target.length) {
           setTimeout(() => finish(next), 0);
@@ -182,6 +211,8 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
     false,
     wpmHistory,
     Math.max(elapsedSec, 0.01),
+    incorrectAttemptsRef.current,
+    extraAttemptsRef.current,
   );
 
   return {

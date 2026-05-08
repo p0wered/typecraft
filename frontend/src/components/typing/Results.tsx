@@ -9,6 +9,7 @@ import {
   YAxis,
 } from "recharts";
 import type { TypingTestResult } from "../../hooks/useTyping";
+import type { KeyMistakes } from "../../utils/typing";
 import { staggerContainer, fadeSlideUp } from "../../utils/motion";
 import styles from "./Results.module.css";
 
@@ -16,6 +17,14 @@ interface ResultsProps {
   result: TypingTestResult;
   onRestart: () => void;
 }
+
+const KEYBOARD_ROWS = [
+  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+  ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+  ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+  ["z", "x", "c", "v", "b", "n", "m"],
+  ["space", "enter"],
+];
 
 export function Results({ result, onRestart }: ResultsProps) {
   const {
@@ -29,6 +38,7 @@ export function Results({ result, onRestart }: ResultsProps) {
     missedChars,
     testDurationSec,
     wpmHistory,
+    keyMistakes,
   } = result;
 
   return (
@@ -45,9 +55,7 @@ export function Results({ result, onRestart }: ResultsProps) {
         </div>
         <div className={styles.primaryStat}>
           <span className={styles.primaryLabel}>acc</span>
-          <span className={styles.primaryValue}>
-            {Math.round(accuracy)}%
-          </span>
+          <span className={styles.primaryValue}>{Math.round(accuracy)}%</span>
         </div>
       </motion.div>
 
@@ -100,6 +108,16 @@ export function Results({ result, onRestart }: ResultsProps) {
         </ResponsiveContainer>
       </motion.div>
 
+      <motion.div className={styles.keyboardPanel} variants={fadeSlideUp}>
+        <div className={styles.panelHeader}>
+          <span className={styles.panelTitle}>problem keys</span>
+          <span className={styles.panelHint}>
+            darker red means more missed hits
+          </span>
+        </div>
+        <KeyboardHeatmap mistakes={keyMistakes} />
+      </motion.div>
+
       <motion.div className={styles.grid} variants={fadeSlideUp}>
         <div className={styles.stat}>
           <span className={styles.statLabel}>raw wpm</span>
@@ -107,9 +125,7 @@ export function Results({ result, onRestart }: ResultsProps) {
         </div>
         <div className={styles.stat}>
           <span className={styles.statLabel}>consistency</span>
-          <span className={styles.statValue}>
-            {Math.round(consistency)}%
-          </span>
+          <span className={styles.statValue}>{Math.round(consistency)}%</span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statLabel}>characters</span>
@@ -135,5 +151,77 @@ export function Results({ result, onRestart }: ResultsProps) {
         </button>
       </motion.div>
     </motion.div>
+  );
+}
+
+function KeyboardHeatmap({ mistakes }: { mistakes: KeyMistakes }) {
+  const maxMistakes = Math.max(0, ...Object.values(mistakes));
+  const knownKeys = new Set(KEYBOARD_ROWS.flat());
+  const extraKeys = Object.keys(mistakes)
+    .filter((key) => !knownKeys.has(key))
+    .sort((a, b) => mistakes[b] - mistakes[a]);
+
+  if (maxMistakes === 0) {
+    return <p className={styles.noMistakes}>No problem keys this time.</p>;
+  }
+
+  return (
+    <div className={styles.keyboard}>
+      {KEYBOARD_ROWS.map((row, rowIndex) => (
+        <div className={styles.keyRow} key={rowIndex}>
+          {row.map((key) => (
+            <HeatKey
+              key={key}
+              label={key}
+              count={mistakes[key] ?? 0}
+              max={maxMistakes}
+            />
+          ))}
+        </div>
+      ))}
+      {extraKeys.length > 0 ? (
+        <div className={styles.keyRow}>
+          {extraKeys.map((key) => (
+            <HeatKey
+              key={key}
+              label={key}
+              count={mistakes[key]}
+              max={maxMistakes}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function HeatKey({
+  label,
+  count,
+  max,
+}: {
+  label: string;
+  count: number;
+  max: number;
+}) {
+  const intensity = max > 0 ? count / max : 0;
+  const alpha = count > 0 ? 0.18 + intensity * 0.62 : 0;
+
+  return (
+    <div
+      className={`${styles.key} ${label === "space" ? styles.spaceKey : ""}`}
+      style={{
+        backgroundColor:
+          count > 0 ? `rgba(239, 68, 68, ${alpha.toFixed(2)})` : undefined,
+        borderColor:
+          count > 0
+            ? `rgba(239, 68, 68, ${Math.min(0.9, alpha + 0.18)})`
+            : undefined,
+      }}
+      title={count > 0 ? `${label}: ${count}` : label}
+    >
+      <span>{label}</span>
+      {count > 0 ? <small>{count}</small> : null}
+    </div>
   );
 }

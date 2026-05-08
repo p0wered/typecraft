@@ -45,6 +45,89 @@
   box-shadow: var(--shadow-sm);
 }
 
+.keyboardPanel {
+  background-color: var(--bg-surface);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.panelTitle {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+}
+
+.panelHint {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.keyRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.key {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.65rem;
+  height: 2.35rem;
+  padding: 0 0.55rem;
+  background-color: var(--bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: lowercase;
+}
+
+.key small {
+  position: absolute;
+  top: 0.18rem;
+  right: 0.3rem;
+  color: #fff;
+  font-size: 0.58rem;
+  line-height: 1;
+}
+
+.spaceKey {
+  min-width: 12rem;
+}
+
+.noMistakes {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem 0;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -143,6 +226,30 @@
     padding: 0.75rem 0.5rem;
   }
 
+  .keyboardPanel {
+    padding: 0.9rem;
+  }
+
+  .panelHeader {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .keyRow {
+    gap: 0.3rem;
+  }
+
+  .key {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.35rem;
+    font-size: 0.68rem;
+  }
+
+  .spaceKey {
+    min-width: 8rem;
+  }
+
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
@@ -160,6 +267,17 @@
 
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .keyboard {
+    align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+  }
+
+  .keyRow {
+    justify-content: flex-start;
+    min-width: max-content;
   }
 
   .statValue {

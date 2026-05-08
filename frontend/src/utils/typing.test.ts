@@ -6,6 +6,8 @@ import {
   calculateRawWpm,
   calculateWpm,
   generateWords,
+  normalizeKeyLabel,
+  recordKeyMistake,
 } from "./typing";
 
 describe("typing utils", () => {
@@ -29,6 +31,7 @@ describe("typing utils", () => {
     expect(calculateWpm(25, 30)).toBe(10);
     expect(calculateRawWpm(50, 60)).toBe(10);
     expect(calculateAccuracy(8, 10)).toBe(80);
+    expect(calculateAccuracy(4, 5)).toBe(80);
     expect(calculateAccuracy(0, 0)).toBe(100);
   });
 
@@ -51,5 +54,20 @@ describe("typing utils", () => {
     expect(words).toHaveLength(3);
     expect(words[1]).not.toBe(words[0]);
     randomSpy.mockRestore();
+  });
+
+  it("normalizes and records problem keys for the heatmap", () => {
+    const mistakes: Record<string, number> = {};
+
+    expect(normalizeKeyLabel(" ")).toBe("space");
+    expect(normalizeKeyLabel("\n")).toBe("enter");
+    expect(normalizeKeyLabel("A")).toBe("a");
+
+    recordKeyMistake(mistakes, "A", "s");
+    recordKeyMistake(mistakes, " ", "x");
+    recordKeyMistake(mistakes, undefined, "x");
+    recordKeyMistake(mistakes, "A", "d");
+
+    expect(mistakes).toEqual({ a: 2, space: 1, x: 1 });
   });
 });

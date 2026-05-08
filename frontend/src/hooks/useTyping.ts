@@ -7,7 +7,9 @@ import {
   calculateRawWpm,
   calculateWpm,
   generateWords,
+  recordKeyMistake,
 } from "../utils/typing";
+import type { KeyMistakes } from "../utils/typing";
 import { useSettingsStore } from "../store/settingsStore";
 import { playKeySound } from "../utils/sound";
 
@@ -31,6 +33,7 @@ export interface TypingStats {
 export interface TypingTestResult extends TypingStats {
   testDurationSec: number;
   wpmHistory: WpmSample[];
+  keyMistakes: KeyMistakes;
 }
 
 interface UseTypingOptions {
@@ -76,6 +79,9 @@ export function useTyping({
   const startedAtRef = useRef<number | null>(null);
   const finishedRef = useRef(false);
   const onFinishRef = useRef(onFinish);
+  const incorrectAttemptsRef = useRef(0);
+  const extraAttemptsRef = useRef(0);
+  const keyMistakesRef = useRef<KeyMistakes>({});
   onFinishRef.current = onFinish;
 
   const timeLimit = mode === "time" ? Math.max(1, Number(modeValue) || 30) : 0;
@@ -90,6 +96,9 @@ export function useTyping({
     setWpmHistory([]);
     startedAtRef.current = null;
     finishedRef.current = false;
+    incorrectAttemptsRef.current = 0;
+    extraAttemptsRef.current = 0;
+    keyMistakesRef.current = {};
   }, [mode, modeValue, language]);
 
   const computeStats = useCallback(
@@ -100,8 +109,6 @@ export function useTyping({
       durationSec: number,
     ): TypingStats => {
       let correct = 0;
-      let incorrect = 0;
-      let extra = 0;
       let missed = 0;
 
       for (let i = 0; i < typedArr.length; i++) {
@@ -112,12 +119,12 @@ export function useTyping({
           isFinishedWord,
         );
         correct += stats.correct;
-        incorrect += stats.incorrect;
-        extra += stats.extra;
         missed += stats.missed;
       }
 
-      const typedTotal = correct + incorrect + extra;
+      const incorrectAttempts = incorrectAttemptsRef.current;
+      const extraAttempts = extraAttemptsRef.current;
+      const typedTotal = correct + incorrectAttempts + extraAttempts;
       const wpm = calculateWpm(correct, durationSec);
       const rawWpm = calculateRawWpm(typedTotal, durationSec);
       const accuracy = calculateAccuracy(correct, typedTotal);
@@ -129,8 +136,8 @@ export function useTyping({
         accuracy,
         consistency,
         correctChars: correct,
-        incorrectChars: incorrect,
-        extraChars: extra,
+        incorrectChars: incorrectAttempts,
+        extraChars: extraAttempts,
         missedChars: missed,
       };
     },
@@ -152,6 +159,7 @@ export function useTyping({
         ...stats,
         testDurationSec: Math.round(duration),
         wpmHistory,
+        keyMistakes: { ...keyMistakesRef.current },
       });
     },
     [computeStats, wpmHistory],
@@ -169,7 +177,6 @@ export function useTyping({
         setCurrentWordIndex((currentIdx) => {
           setWords((currentWords) => {
             let correctSoFar = 0;
-            let totalTyped = 0;
             for (let i = 0; i < currentTyped.length; i++) {
               const stats = analyzeWord(
                 currentWords[i] ?? "",
@@ -177,10 +184,14 @@ export function useTyping({
                 false,
               );
               correctSoFar += stats.correct;
-              totalTyped += stats.correct + stats.incorrect + stats.extra;
             }
             const wpm = calculateWpm(correctSoFar, elapsed);
-            const rawWpm = calculateRawWpm(totalTyped, elapsed);
+            const rawWpm = calculateRawWpm(
+              correctSoFar +
+                incorrectAttemptsRef.current +
+                extraAttemptsRef.current,
+              elapsed,
+            );
             setWpmHistory((h) => [
               ...h,
               { sec: Math.round(elapsed), wpm, rawWpm },
@@ -272,13 +283,24 @@ export function useTyping({
       }
 
       if (isPrintable) {
+        const currentTarget = words[currentWordIndex] ?? "";
+        const currentTypedBefore = typedWords[currentWordIndex] ?? "";
+        const expectedChar = currentTarget[currentTypedBefore.length];
+
+        if (expectedChar === undefined) {
+          extraAttemptsRef.current += 1;
+          recordKeyMistake(keyMistakesRef.current, undefined, key);
+        } else if (key !== expectedChar) {
+          incorrectAttemptsRef.current += 1;
+          recordKeyMistake(keyMistakesRef.current, expectedChar, key);
+        }
+
         setTypedWords((prev) => {
           const next = [...prev];
           next[currentWordIndex] = (next[currentWordIndex] ?? "") + key;
           return next;
         });
 
-        const currentTarget = words[currentWordIndex] ?? "";
         const currentTyped = (typedWords[currentWordIndex] ?? "") + key;
 
         if (
