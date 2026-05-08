@@ -1,4 +1,10 @@
-export type Theme = "dark" | "light";
+export type Theme =
+  | "midnight"
+  | "amethyst"
+  | "ocean"
+  | "forest"
+  | "sunset"
+  | "latte";
 export type InterfaceLanguage = "ru" | "en";
 
 export interface UserSettings {

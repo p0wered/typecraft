@@ -42,7 +42,7 @@ export const userSettings = sqliteTable("user_settings", {
     .notNull()
     .unique()
     .references(() => users.id, { onDelete: "cascade" }),
-  theme: text("theme").notNull().default("dark"),
+  theme: text("theme").notNull().default("midnight"),
   language: text("language").notNull().default("en"),
   fontSize: integer("font_size").notNull().default(24),
   smoothCaret: integer("smooth_caret", { mode: "boolean" })

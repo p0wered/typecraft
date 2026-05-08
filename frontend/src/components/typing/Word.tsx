@@ -1,3 +1,4 @@
+import { useSettingsStore } from "../../store/settingsStore";
 import styles from "./Word.module.css";
 
 interface WordProps {
@@ -7,6 +8,7 @@ interface WordProps {
 }
 
 export function Word({ target, typed, isCurrent }: WordProps) {
+  const smoothCaret = useSettingsStore((s) => s.smoothCaret);
   const targetChars = target.split("");
   const typedLen = typed.length;
   const hasExtras = typedLen > target.length;
@@ -14,7 +16,7 @@ export function Word({ target, typed, isCurrent }: WordProps) {
   const endCaret = isCurrent && typedLen === target.length;
 
   return (
-    <div className={styles.word}>
+    <div className={`${styles.word} ${smoothCaret ? "" : styles.instant}`}>
       {targetChars.map((char, i) => {
         let state: "untyped" | "correct" | "incorrect" = "untyped";
         if (i < typedLen) {

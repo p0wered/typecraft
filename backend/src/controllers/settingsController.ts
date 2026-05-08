@@ -5,8 +5,25 @@ import { db } from "../db/index.js";
 import { userSettings } from "../db/schema.js";
 import type { AuthRequest } from "../middleware/auth.js";
 
+const themeValues = [
+  "midnight",
+  "amethyst",
+  "ocean",
+  "forest",
+  "sunset",
+  "latte",
+  "dark",
+  "light",
+] as const;
+
+function normalizeTheme(theme: string) {
+  if (theme === "dark") return "midnight";
+  if (theme === "light") return "latte";
+  return theme;
+}
+
 const updateSettingsSchema = z.object({
-  theme: z.enum(["dark", "light"]).optional(),
+  theme: z.enum(themeValues).optional(),
   language: z.enum(["ru", "en"]).optional(),
   fontSize: z.number().int().min(12).max(48).optional(),
   smoothCaret: z.boolean().optional(),
@@ -28,6 +45,7 @@ export function getSettings(req: AuthRequest, res: Response) {
 
   res.json({
     ...settings,
+    theme: normalizeTheme(settings.theme),
     customConfig: JSON.parse(settings.customConfig),
   });
 }
@@ -42,7 +60,7 @@ export function updateSettings(req: AuthRequest, res: Response) {
   const data = parsed.data;
   const update: Record<string, unknown> = {};
 
-  if (data.theme !== undefined) update.theme = data.theme;
+  if (data.theme !== undefined) update.theme = normalizeTheme(data.theme);
   if (data.language !== undefined) update.language = data.language;
   if (data.fontSize !== undefined) update.fontSize = data.fontSize;
   if (data.smoothCaret !== undefined) update.smoothCaret = data.smoothCaret;

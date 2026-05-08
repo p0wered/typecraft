@@ -8,6 +8,8 @@ import {
   calculateWpm,
   generateWords,
 } from "../utils/typing";
+import { useSettingsStore } from "../store/settingsStore";
+import { playKeySound } from "../utils/sound";
 
 export interface WpmSample {
   sec: number;
@@ -212,6 +214,9 @@ export function useTyping({
       if (!isPrintable && !isSpace && !isBackspace) return;
 
       e.preventDefault();
+      if (useSettingsStore.getState().soundEnabled) {
+        playKeySound();
+      }
 
       if (startedAtRef.current === null) {
         const now = Date.now();

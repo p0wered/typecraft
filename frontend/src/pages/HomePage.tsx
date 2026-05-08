@@ -13,6 +13,7 @@ import { useTypingStore } from "../store/typingStore";
 import { useResultsStore } from "../store/resultsStore";
 import { useAuthStore } from "../store/authStore";
 import { resultsApi } from "../services/results";
+import { useI18n } from "../utils/i18n";
 import {
   isContentLength,
   isProgrammingLanguage,
@@ -32,6 +33,7 @@ function resolveResultLanguage(
 }
 
 export function HomePage() {
+  const { t } = useI18n();
   const mode = useTypingStore((s) => s.mode);
   const modeValue = useTypingStore((s) => s.modeValue);
   const typingLanguage = useTypingStore((s) => s.typingLanguage);
@@ -148,7 +150,7 @@ export function HomePage() {
               />
             )}
             <motion.p className={styles.hint} variants={fadeSlideUp}>
-              press <kbd>esc</kbd> to restart
+              {t("home.restartHint")} <kbd>esc</kbd> {t("home.restartAction")}
             </motion.p>
           </motion.div>
         )}

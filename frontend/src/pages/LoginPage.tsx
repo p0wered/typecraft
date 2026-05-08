@@ -4,10 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { authApi } from "../services/auth";
 import { ApiError } from "../services/api";
 import { useAuthStore } from "../store/authStore";
+import { useI18n } from "../utils/i18n";
 import { staggerContainer, fadeSlideUp } from "../utils/motion";
 import styles from "./LoginPage.module.css";
 
 export function LoginPage() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
@@ -31,16 +33,16 @@ export function LoginPage() {
 
     if (isRegister) {
       if (username.trim().length < 3) {
-        setError("Username must be at least 3 characters");
+        setError(t("login.usernameError"));
         return;
       }
       if (password.length < 6) {
-        setError("Password must be at least 6 characters");
+        setError(t("login.passwordError"));
         return;
       }
     }
     if (!email.includes("@")) {
-      setError("Please enter a valid email");
+      setError(t("login.emailError"));
       return;
     }
 
@@ -52,9 +54,7 @@ export function LoginPage() {
       setAuth(data.user, data.token);
       navigate("/profile", { replace: true });
     } catch (err) {
-      setError(
-        err instanceof ApiError ? err.message : "Something went wrong",
-      );
+      setError(err instanceof ApiError ? err.message : t("login.genericError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -73,7 +73,7 @@ export function LoginPage() {
       animate="animate"
     >
       <motion.h1 className={styles.title} variants={fadeSlideUp}>
-        {isRegister ? "Register" : "Login"}
+        {isRegister ? t("login.title.register") : t("login.title.login")}
       </motion.h1>
       <motion.div className={styles.card} variants={fadeSlideUp}>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -83,7 +83,7 @@ export function LoginPage() {
                 key="username"
                 className={styles.input}
                 type="text"
-                placeholder="username"
+                placeholder={t("login.username")}
                 autoComplete="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -97,7 +97,7 @@ export function LoginPage() {
           <input
             className={styles.input}
             type="email"
-            placeholder="email"
+            placeholder={t("login.email")}
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -105,7 +105,7 @@ export function LoginPage() {
           <input
             className={styles.input}
             type="password"
-            placeholder="password"
+            placeholder={t("login.password")}
             autoComplete={isRegister ? "new-password" : "current-password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -130,17 +130,15 @@ export function LoginPage() {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "..." : isRegister ? "sign up" : "sign in"}
+            {isSubmitting
+              ? "..."
+              : isRegister
+                ? t("login.submit.register")
+                : t("login.submit.login")}
           </button>
         </form>
-        <button
-          className={styles.toggleBtn}
-          onClick={toggleMode}
-          type="button"
-        >
-          {isRegister
-            ? "already have an account? login"
-            : "don't have an account? register"}
+        <button className={styles.toggleBtn} onClick={toggleMode} type="button">
+          {isRegister ? t("login.toLogin") : t("login.toRegister")}
         </button>
       </motion.div>
     </motion.div>

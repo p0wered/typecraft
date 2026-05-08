@@ -2,9 +2,9 @@
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  font-size: 1.625rem;
-  line-height: 2.25rem;
-  height: calc(2.25rem * var(--visible-lines));
+  font-size: var(--typing-font-size);
+  line-height: calc(var(--typing-font-size) * 1.4);
+  height: calc(var(--typing-font-size) * 1.4 * var(--visible-lines));
   overflow: hidden;
   position: relative;
 }
@@ -14,4 +14,19 @@
   flex-wrap: wrap;
   transition: transform 300ms ease;
   will-change: transform;
+}
+
+.instant .words {
+  transition: none;
+}
+
+@media (max-width: 760px) {
+  .container {
+    font-size: clamp(1.15rem, var(--typing-font-size), 1.5rem);
+    line-height: calc(clamp(1.15rem, var(--typing-font-size), 1.5rem) * 1.45);
+    height: calc(
+      clamp(1.15rem, var(--typing-font-size), 1.5rem) * 1.45 *
+        var(--visible-lines)
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Word } from "./Word";
+import { useSettingsStore } from "../../store/settingsStore";
 import styles from "./TypingArea.module.css";
 
 interface TypingAreaProps {
@@ -15,6 +16,7 @@ export function TypingArea({
   typedWords,
   currentWordIndex,
 }: TypingAreaProps) {
+  const smoothCaret = useSettingsStore((s) => s.smoothCaret);
   const containerRef = useRef<HTMLDivElement>(null);
   const wordsRef = useRef<HTMLDivElement>(null);
   const lineHeightRef = useRef(0);
@@ -50,7 +52,7 @@ export function TypingArea({
   return (
     <div
       ref={containerRef}
-      className={styles.container}
+      className={`${styles.container} ${smoothCaret ? "" : styles.instant}`}
       style={{ ["--visible-lines" as string]: VISIBLE_LINES }}
     >
       <div ref={wordsRef} className={styles.words}>

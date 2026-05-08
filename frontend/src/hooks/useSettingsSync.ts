@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { UpdateSettingsRequest } from "@typecraft/shared";
 import { useAuthStore } from "../store/authStore";
-import { useSettingsStore } from "../store/settingsStore";
+import { normalizeTheme, useSettingsStore } from "../store/settingsStore";
 import { settingsApi } from "../services/settings";
 
 const PUSH_DEBOUNCE_MS = 400;
@@ -29,7 +29,7 @@ export function useSettingsSync() {
       .then((settings) => {
         suppressPushRef.current = true;
         useSettingsStore.setState({
-          theme: settings.theme,
+          theme: normalizeTheme(settings.theme),
           language: settings.language,
           fontSize: settings.fontSize,
           smoothCaret: settings.smoothCaret,

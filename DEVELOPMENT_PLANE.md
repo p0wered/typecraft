@@ -8,34 +8,34 @@
 
 ### Frontend
 
-| Технология | Назначение |
-|---|---|
-| React 19 + TypeScript | UI-фреймворк |
-| Vite | Сборка и dev-сервер |
-| CSS Modules | Стилизация (изолированные стили) |
-| React Router v7 | Маршрутизация |
-| Zustand | Стейт-менеджмент |
-| Framer Motion | Анимации (page transitions, layout, микровзаимодействия) |
-| Recharts | Графики статистики |
+| Технология            | Назначение                                               |
+| --------------------- | -------------------------------------------------------- |
+| React 19 + TypeScript | UI-фреймворк                                             |
+| Vite                  | Сборка и dev-сервер                                      |
+| CSS Modules           | Стилизация (изолированные стили)                         |
+| React Router v7       | Маршрутизация                                            |
+| Zustand               | Стейт-менеджмент                                         |
+| Framer Motion         | Анимации (page transitions, layout, микровзаимодействия) |
+| Recharts              | Графики статистики                                       |
 
 ### Backend
 
-| Технология | Назначение |
-|---|---|
-| Node.js + Express + TypeScript | HTTP-сервер и API |
-| Drizzle ORM | TypeScript-native ORM для SQLite |
-| better-sqlite3 | Драйвер SQLite |
-| jsonwebtoken + bcryptjs | JWT-аутентификация |
-| zod | Валидация запросов |
+| Технология                     | Назначение                       |
+| ------------------------------ | -------------------------------- |
+| Node.js + Express + TypeScript | HTTP-сервер и API                |
+| Drizzle ORM                    | TypeScript-native ORM для SQLite |
+| better-sqlite3                 | Драйвер SQLite                   |
+| jsonwebtoken + bcryptjs        | JWT-аутентификация               |
+| zod                            | Валидация запросов               |
 
 ### Инструменты
 
-| Технология | Назначение |
-|---|---|
-| npm workspaces | Управление монорепо |
-| ESLint + Prettier | Линтинг и форматирование |
-| Vitest | Тестирование |
-| concurrently | Параллельный запуск frontend + backend |
+| Технология        | Назначение                             |
+| ----------------- | -------------------------------------- |
+| npm workspaces    | Управление монорепо                    |
+| ESLint + Prettier | Линтинг и форматирование               |
+| Vitest            | Тестирование                           |
+| concurrently      | Параллельный запуск frontend + backend |
 
 ---
 
@@ -92,47 +92,47 @@ typecraft/
 
 ### Таблица `users`
 
-| Поле | Тип | Описание |
-|---|---|---|
-| id | INTEGER (PK) | Автоинкремент |
-| username | TEXT (UNIQUE) | Имя пользователя |
-| email | TEXT (UNIQUE) | Email |
-| password_hash | TEXT | Хеш пароля (bcrypt) |
-| created_at | TEXT | Дата создания (ISO 8601) |
-| updated_at | TEXT | Дата обновления (ISO 8601) |
+| Поле          | Тип           | Описание                   |
+| ------------- | ------------- | -------------------------- |
+| id            | INTEGER (PK)  | Автоинкремент              |
+| username      | TEXT (UNIQUE) | Имя пользователя           |
+| email         | TEXT (UNIQUE) | Email                      |
+| password_hash | TEXT          | Хеш пароля (bcrypt)        |
+| created_at    | TEXT          | Дата создания (ISO 8601)   |
+| updated_at    | TEXT          | Дата обновления (ISO 8601) |
 
 ### Таблица `results`
 
-| Поле | Тип | Описание |
-|---|---|---|
-| id | INTEGER (PK) | Автоинкремент |
-| user_id | INTEGER (FK → users) | Ссылка на пользователя |
-| mode | TEXT | Режим: "words" / "time" / "quote" / "code" |
-| mode_value | TEXT | Параметр режима (кол-во слов, секунды, id цитаты, язык кода) |
-| language | TEXT | Язык текста (en, ru, javascript, python и т.д.) |
-| wpm | REAL | Слов в минуту |
-| raw_wpm | REAL | Сырой WPM (без учёта ошибок) |
-| accuracy | REAL | Точность (%) |
-| consistency | REAL | Консистентность (%) |
-| correct_chars | INTEGER | Правильных символов |
-| incorrect_chars | INTEGER | Неправильных символов |
-| extra_chars | INTEGER | Лишних символов |
-| missed_chars | INTEGER | Пропущенных символов |
-| test_duration_sec | INTEGER | Длительность теста (сек) |
-| created_at | TEXT | Дата прохождения (ISO 8601) |
+| Поле              | Тип                  | Описание                                                     |
+| ----------------- | -------------------- | ------------------------------------------------------------ |
+| id                | INTEGER (PK)         | Автоинкремент                                                |
+| user_id           | INTEGER (FK → users) | Ссылка на пользователя                                       |
+| mode              | TEXT                 | Режим: "words" / "time" / "quote" / "code"                   |
+| mode_value        | TEXT                 | Параметр режима (кол-во слов, секунды, id цитаты, язык кода) |
+| language          | TEXT                 | Язык текста (en, ru, javascript, python и т.д.)              |
+| wpm               | REAL                 | Слов в минуту                                                |
+| raw_wpm           | REAL                 | Сырой WPM (без учёта ошибок)                                 |
+| accuracy          | REAL                 | Точность (%)                                                 |
+| consistency       | REAL                 | Консистентность (%)                                          |
+| correct_chars     | INTEGER              | Правильных символов                                          |
+| incorrect_chars   | INTEGER              | Неправильных символов                                        |
+| extra_chars       | INTEGER              | Лишних символов                                              |
+| missed_chars      | INTEGER              | Пропущенных символов                                         |
+| test_duration_sec | INTEGER              | Длительность теста (сек)                                     |
+| created_at        | TEXT                 | Дата прохождения (ISO 8601)                                  |
 
 ### Таблица `user_settings`
 
-| Поле | Тип | Описание |
-|---|---|---|
-| id | INTEGER (PK) | Автоинкремент |
-| user_id | INTEGER (FK → users, UNIQUE) | Ссылка на пользователя |
-| theme | TEXT | Тема: "dark" / "light" |
-| language | TEXT | Язык интерфейса: "ru" / "en" |
-| font_size | INTEGER | Размер шрифта (px) |
-| smooth_caret | INTEGER | Плавная каретка: 0/1 |
-| sound_enabled | INTEGER | Звук: 0/1 |
-| custom_config | TEXT | JSON с дополнительными настройками |
+| Поле          | Тип                          | Описание                           |
+| ------------- | ---------------------------- | ---------------------------------- |
+| id            | INTEGER (PK)                 | Автоинкремент                      |
+| user_id       | INTEGER (FK → users, UNIQUE) | Ссылка на пользователя             |
+| theme         | TEXT                         | Цветовая палитра интерфейса        |
+| language      | TEXT                         | Язык интерфейса: "ru" / "en"       |
+| font_size     | INTEGER                      | Размер шрифта (px)                 |
+| smooth_caret  | INTEGER                      | Плавная каретка: 0/1               |
+| sound_enabled | INTEGER                      | Звук: 0/1                          |
+| custom_config | TEXT                         | JSON с дополнительными настройками |
 
 ### Связи
 
@@ -207,35 +207,35 @@ typecraft/
 
 ### Auth
 
-| Метод | Путь | Описание |
-|---|---|---|
-| POST | `/api/auth/register` | Регистрация нового пользователя |
-| POST | `/api/auth/login` | Логин (возвращает JWT) |
-| GET | `/api/auth/me` | Получить текущего пользователя по токену |
+| Метод | Путь                 | Описание                                 |
+| ----- | -------------------- | ---------------------------------------- |
+| POST  | `/api/auth/register` | Регистрация нового пользователя          |
+| POST  | `/api/auth/login`    | Логин (возвращает JWT)                   |
+| GET   | `/api/auth/me`       | Получить текущего пользователя по токену |
 
 ### Results
 
-| Метод | Путь | Описание |
-|---|---|---|
-| POST | `/api/results` | Сохранить результат теста |
-| GET | `/api/results` | История тестов (пагинация + фильтры) |
-| GET | `/api/results/stats` | Агрегированная статистика |
-| GET | `/api/results/personal-best` | Личные рекорды по режимам |
+| Метод | Путь                         | Описание                             |
+| ----- | ---------------------------- | ------------------------------------ |
+| POST  | `/api/results`               | Сохранить результат теста            |
+| GET   | `/api/results`               | История тестов (пагинация + фильтры) |
+| GET   | `/api/results/stats`         | Агрегированная статистика            |
+| GET   | `/api/results/personal-best` | Личные рекорды по режимам            |
 
 ### Settings
 
-| Метод | Путь | Описание |
-|---|---|---|
-| GET | `/api/settings` | Получить настройки пользователя |
-| PUT | `/api/settings` | Обновить настройки |
+| Метод | Путь            | Описание                        |
+| ----- | --------------- | ------------------------------- |
+| GET   | `/api/settings` | Получить настройки пользователя |
+| PUT   | `/api/settings` | Обновить настройки              |
 
 ### Content
 
-| Метод | Путь | Описание |
-|---|---|---|
-| GET | `/api/words/:language` | Получить набор слов для языка |
-| GET | `/api/quotes` | Получить случайную цитату |
-| GET | `/api/snippets/:language` | Получить код-сниппет для ЯП |
+| Метод | Путь                      | Описание                      |
+| ----- | ------------------------- | ----------------------------- |
+| GET   | `/api/words/:language`    | Получить набор слов для языка |
+| GET   | `/api/quotes`             | Получить случайную цитату     |
+| GET   | `/api/snippets/:language` | Получить код-сниппет для ЯП   |
 
 ---
 
@@ -276,21 +276,21 @@ typecraft/
 
 ### Фаза 5: Профиль и статистика
 
-- [ ] Страница профиля
-- [ ] Графики прогресса (Recharts)
-- [ ] История тестов с фильтрацией
-- [ ] Личные рекорды
+- [x] Страница профиля
+- [x] Графики прогресса (Recharts)
+- [x] История тестов с фильтрацией
+- [x] Личные рекорды
 
 ### Фаза 6: Темы и настройки
 
-- [ ] Система тем (CSS-переменные, dark/light)
-- [ ] Страница настроек
-- [ ] Локализация интерфейса (i18n: ru/en)
-- [ ] Smooth caret, звуковые эффекты
+- [x] Система тем (CSS-переменные, набор цветовых палитр)
+- [x] Страница настроек
+- [x] Локализация интерфейса (i18n: ru/en)
+- [x] Smooth caret, звуковые эффекты
 
 ### Фаза 7: Полировка
 
-- [ ] Адаптивная вёрстка (mobile-friendly)
+- [x] Адаптивная вёрстка (mobile-friendly)
 - [ ] Анимации и микровзаимодействия
 - [ ] Оптимизация производительности
-- [ ] Тесты (Vitest)
+- [x] Тесты (Vitest)

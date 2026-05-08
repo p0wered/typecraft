@@ -21,6 +21,55 @@
   color: var(--accent);
 }
 
+.menuButton {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.28rem;
+  margin-left: auto;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--text-tertiary);
+  border-radius: var(--radius-md);
+}
+
+.menuButton span {
+  width: 1rem;
+  height: 2px;
+  background-color: var(--text-secondary);
+  border-radius: 999px;
+  transition:
+    transform var(--transition-fast),
+    opacity var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.menuButton:hover span,
+.menuOpen .menuButton span {
+  background-color: var(--accent);
+}
+
+.menuOpen .menuButton span:nth-child(1) {
+  transform: translateY(0.38rem) rotate(45deg);
+}
+
+.menuOpen .menuButton span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuOpen .menuButton span:nth-child(3) {
+  transform: translateY(-0.38rem) rotate(-45deg);
+}
+
+.menuPanel {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1;
+}
+
 .nav {
   display: flex;
   gap: 0.25rem;
@@ -113,4 +162,123 @@
 .logoutBtn:hover {
   color: var(--error);
   border-color: var(--error);
+}
+
+@media (max-width: 760px) {
+  .header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    padding: 1rem 0;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+    line-height: 2.5rem;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+
+  .menuPanel {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-0.4rem);
+    padding: 0 0.6rem;
+    background-color: var(--bg-surface);
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    pointer-events: none;
+    transition:
+      max-height var(--transition-normal),
+      opacity var(--transition-normal),
+      transform var(--transition-normal),
+      padding var(--transition-normal),
+      border-color var(--transition-normal);
+  }
+
+  .menuOpen .menuPanel {
+    max-height: 22rem;
+    opacity: 1;
+    transform: translateY(0);
+    padding: 0.6rem;
+    border-color: rgba(255, 255, 255, 0.04);
+    pointer-events: auto;
+  }
+
+  .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .navLink,
+  .authLink,
+  .logoutBtn,
+  .username {
+    font-size: 0.78rem;
+  }
+
+  .navLink {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.65rem 0.75rem;
+    background-color: transparent;
+  }
+
+  .active {
+    background-color: var(--accent-soft);
+  }
+
+  .activeIndicator {
+    display: none;
+  }
+
+  .actions {
+    margin-left: 0;
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .userGroup {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .authLink,
+  .logoutBtn {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .userGroup {
+    gap: 0.5rem;
+  }
+
+  .username {
+    max-width: 7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .navLink,
+  .authLink,
+  .logoutBtn {
+    padding: 0.6rem 0.65rem;
+  }
 }

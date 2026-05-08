@@ -31,6 +31,7 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      "no-undef": "off",
       "no-unused-vars": "off",
     },
   },

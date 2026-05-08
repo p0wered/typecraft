@@ -19,7 +19,12 @@
 .separator {
   width: 1px;
   height: 1.25rem;
-  background: linear-gradient(to bottom, transparent, var(--text-secondary), transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--text-secondary),
+    transparent
+  );
   opacity: 0.3;
 }
 
@@ -47,4 +52,45 @@
 
 .active:hover {
   color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .modeBar {
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    gap: 0.65rem;
+    overflow-x: auto;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-lg);
+    scrollbar-width: none;
+  }
+
+  .modeBar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .group {
+    flex: 0 0 auto;
+  }
+
+  .btn {
+    padding: 0.35rem 0.6rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .modeBar {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .group {
+    flex-wrap: wrap;
+  }
 }

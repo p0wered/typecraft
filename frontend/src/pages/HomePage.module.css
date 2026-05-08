@@ -60,3 +60,29 @@
   font-size: 0.75rem;
   color: var(--text-primary);
 }
+
+@media (max-width: 760px) {
+  .container {
+    gap: 1.75rem;
+    padding: 1rem 0;
+  }
+
+  .testWrapper {
+    gap: 1.75rem;
+  }
+
+  .topBar {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .typingArea {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .hint {
+    text-align: center;
+  }
+}

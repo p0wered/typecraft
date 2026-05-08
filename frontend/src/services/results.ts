@@ -2,6 +2,7 @@ import type {
   AggregatedStats,
   CreateResultRequest,
   PersonalBest,
+  ProgressPoint,
   ResultsQuery,
   TypingResult,
 } from "@typecraft/shared";
@@ -22,5 +23,7 @@ export const resultsApi = {
     );
   },
   stats: () => api.get<AggregatedStats>("/results/stats"),
+  progress: (limit = 30) =>
+    api.get<ProgressPoint[]>(`/results/progress?limit=${limit}`),
   personalBest: () => api.get<PersonalBest[]>("/results/personal-best"),
 };

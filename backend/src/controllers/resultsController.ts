@@ -40,10 +40,14 @@ export function getResults(req: AuthRequest, res: Response) {
   const page = Math.max(1, Number(req.query.page) || 1);
   const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 25));
   const mode = req.query.mode as string | undefined;
+  const language = req.query.language as string | undefined;
 
   const conditions = [eq(results.userId, req.userId!)];
   if (mode) {
     conditions.push(eq(results.mode, mode));
+  }
+  if (language) {
+    conditions.push(eq(results.language, language));
   }
 
   const rows = db
@@ -87,6 +91,28 @@ export function getStats(req: AuthRequest, res: Response) {
       : 0;
 
   res.json({ ...row, last10AverageWpm: last10Avg });
+}
+
+export function getProgress(req: AuthRequest, res: Response) {
+  const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 30));
+
+  const rows = db
+    .select({
+      id: results.id,
+      mode: results.mode,
+      language: results.language,
+      wpm: results.wpm,
+      accuracy: results.accuracy,
+      createdAt: results.createdAt,
+    })
+    .from(results)
+    .where(eq(results.userId, req.userId!))
+    .orderBy(desc(results.createdAt))
+    .limit(limit)
+    .all()
+    .reverse();
+
+  res.json(rows);
 }
 
 export function getPersonalBest(req: AuthRequest, res: Response) {

@@ -1,11 +1,12 @@
 import type { TypingMode } from "@typecraft/shared";
+import { useI18n, type TranslationKey } from "../../utils/i18n";
 import styles from "./ModeBar.module.css";
 
-const MODES: { id: TypingMode; label: string }[] = [
-  { id: "words", label: "words" },
-  { id: "time", label: "time" },
-  { id: "quote", label: "quote" },
-  { id: "code", label: "code" },
+const MODES: { id: TypingMode; labelKey: `mode.${TypingMode}` }[] = [
+  { id: "words", labelKey: "mode.words" },
+  { id: "time", labelKey: "mode.time" },
+  { id: "quote", labelKey: "mode.quote" },
+  { id: "code", labelKey: "mode.code" },
 ];
 
 const MODE_OPTIONS: Record<TypingMode, string[]> = {
@@ -16,6 +17,11 @@ const MODE_OPTIONS: Record<TypingMode, string[]> = {
 };
 
 const LANGUAGE_OPTIONS = ["en", "ru"] as const;
+const OPTION_LABELS: Record<string, TranslationKey> = {
+  short: "mode.short",
+  medium: "mode.medium",
+  long: "mode.long",
+};
 
 interface ModeBarProps {
   mode: TypingMode;
@@ -34,19 +40,20 @@ export function ModeBar({
   onValueChange,
   onLanguageChange,
 }: ModeBarProps) {
+  const { t } = useI18n();
   const options = MODE_OPTIONS[mode];
   const showLanguage = mode === "words" || mode === "time" || mode === "quote";
 
   return (
     <div className={styles.modeBar}>
       <div className={styles.group}>
-        {MODES.map(({ id, label }) => (
+        {MODES.map(({ id, labelKey }) => (
           <button
             key={id}
             className={`${styles.btn} ${mode === id ? styles.active : ""}`}
             onClick={() => onModeChange(id)}
           >
-            {label}
+            {t(labelKey)}
           </button>
         ))}
       </div>
@@ -58,7 +65,9 @@ export function ModeBar({
             className={`${styles.btn} ${modeValue === option ? styles.active : ""}`}
             onClick={() => onValueChange(option)}
           >
-            {option}
+            {mode === "quote" && OPTION_LABELS[option]
+              ? t(OPTION_LABELS[option])
+              : option}
           </button>
         ))}
       </div>

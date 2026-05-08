@@ -5,6 +5,8 @@ import {
   calculateRawWpm,
   calculateWpm,
 } from "../utils/typing";
+import { useSettingsStore } from "../store/settingsStore";
+import { playKeySound } from "../utils/sound";
 import type { TypingStats, TypingTestResult, WpmSample } from "./useTyping";
 
 interface UseCharTypingOptions {
@@ -62,30 +64,33 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
     finishedRef.current = false;
   }, []);
 
-  const finish = useCallback((finalTyped: string) => {
-    if (finishedRef.current) return;
-    finishedRef.current = true;
+  const finish = useCallback(
+    (finalTyped: string) => {
+      if (finishedRef.current) return;
+      finishedRef.current = true;
 
-    const started = startedAtRef.current ?? Date.now();
-    const duration = (Date.now() - started) / 1000;
-    setIsFinished(true);
+      const started = startedAtRef.current ?? Date.now();
+      const duration = (Date.now() - started) / 1000;
+      setIsFinished(true);
 
-    setWpmHistory((history) => {
-      const stats = computeCharStats(
-        target,
-        finalTyped,
-        true,
-        history,
-        Math.max(duration, 0.01),
-      );
-      onFinishRef.current({
-        ...stats,
-        testDurationSec: Math.max(1, Math.round(duration)),
-        wpmHistory: history,
+      setWpmHistory((history) => {
+        const stats = computeCharStats(
+          target,
+          finalTyped,
+          true,
+          history,
+          Math.max(duration, 0.01),
+        );
+        onFinishRef.current({
+          ...stats,
+          testDurationSec: Math.max(1, Math.round(duration)),
+          wpmHistory: history,
+        });
+        return history;
       });
-      return history;
-    });
-  }, [target]);
+    },
+    [target],
+  );
 
   useEffect(() => {
     if (startedAt === null || isFinished) return;
@@ -102,10 +107,7 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
         }
         const wpm = calculateWpm(correct, elapsed);
         const rawWpm = calculateRawWpm(currentTyped.length, elapsed);
-        setWpmHistory((h) => [
-          ...h,
-          { sec: Math.round(elapsed), wpm, rawWpm },
-        ]);
+        setWpmHistory((h) => [...h, { sec: Math.round(elapsed), wpm, rawWpm }]);
         return currentTyped;
       });
     }, 1000);
@@ -127,6 +129,9 @@ export function useCharTyping({ target, onFinish }: UseCharTypingOptions) {
       if (!isPrintable && !isBackspace && !isEnter && !isTab) return;
 
       e.preventDefault();
+      if (useSettingsStore.getState().soundEnabled) {
+        playKeySound();
+      }
 
       if (startedAtRef.current === null && (isPrintable || isEnter || isTab)) {
         const now = Date.now();

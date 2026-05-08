@@ -104,3 +104,17 @@
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: var(--radius-sm);
 }
+
+@media (max-width: 520px) {
+  .container {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.65rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+}

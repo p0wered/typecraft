@@ -42,3 +42,29 @@
   z-index: -1;
   filter: var(--blur-lg);
 }
+
+@media (max-width: 760px) {
+  .layout {
+    padding: 0 1rem;
+  }
+
+  .main {
+    justify-content: flex-start;
+    padding: 1.25rem 0;
+  }
+
+  .bgGlow {
+    width: 420px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout {
+    padding: 0 0.75rem;
+  }
+
+  .footer {
+    padding: 1rem 0;
+  }
+}

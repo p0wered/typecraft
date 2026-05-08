@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useSettingsStore } from "../../store/settingsStore";
 import styles from "./CharTypingArea.module.css";
 
 interface CharTypingAreaProps {
@@ -7,7 +8,12 @@ interface CharTypingAreaProps {
   variant: "quote" | "code";
 }
 
-export function CharTypingArea({ target, typed, variant }: CharTypingAreaProps) {
+export function CharTypingArea({
+  target,
+  typed,
+  variant,
+}: CharTypingAreaProps) {
+  const smoothCaret = useSettingsStore((s) => s.smoothCaret);
   const containerRef = useRef<HTMLDivElement>(null);
   const caretRef = useRef<HTMLSpanElement | null>(null);
 
@@ -49,7 +55,7 @@ export function CharTypingArea({ target, typed, variant }: CharTypingAreaProps) 
   return (
     <div
       ref={containerRef}
-      className={`${styles.container} ${variant === "code" ? styles.code : styles.quote}`}
+      className={`${styles.container} ${variant === "code" ? styles.code : styles.quote} ${smoothCaret ? "" : styles.instant}`}
     >
       <div className={styles.content}>
         {lines.map((line, lineIdx) => {

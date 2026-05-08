@@ -5,7 +5,10 @@
   overflow-y: auto;
   scrollbar-width: thin;
   font-variant-ligatures: none;
-  font-feature-settings: "liga" 0, "clig" 0, "calt" 0;
+  font-feature-settings:
+    "liga" 0,
+    "clig" 0,
+    "calt" 0;
 }
 
 .container::-webkit-scrollbar {
@@ -23,9 +26,9 @@
 }
 
 .quote {
-  font-size: 1.625rem;
-  line-height: 2.25rem;
-  max-height: calc(2.25rem * 5);
+  font-size: var(--typing-font-size);
+  line-height: calc(var(--typing-font-size) * 1.4);
+  max-height: calc(var(--typing-font-size) * 1.4 * 5);
   font-family: var(--font-mono);
 }
 
@@ -98,7 +101,44 @@
   top: 0.15em;
 }
 
+.instant {
+  scroll-behavior: auto;
+}
+
+.instant .caret {
+  animation: none;
+}
+
 @keyframes caretBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 760px) {
+  .quote {
+    font-size: clamp(1.15rem, var(--typing-font-size), 1.5rem);
+    line-height: calc(clamp(1.15rem, var(--typing-font-size), 1.5rem) * 1.45);
+    max-height: calc(
+      clamp(1.15rem, var(--typing-font-size), 1.5rem) * 1.45 * 6
+    );
+  }
+
+  .code {
+    font-size: 0.95rem;
+    line-height: 1.55rem;
+    max-height: calc(1.55rem * 12);
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .code {
+    margin-inline: -0.25rem;
+    padding: 0.85rem;
+  }
 }

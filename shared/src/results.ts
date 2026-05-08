@@ -49,6 +49,15 @@ export interface PersonalBest {
   createdAt: string;
 }
 
+export interface ProgressPoint {
+  id: number;
+  mode: TypingMode;
+  language: string;
+  wpm: number;
+  accuracy: number;
+  createdAt: string;
+}
+
 export interface AggregatedStats {
   totalTests: number;
   averageWpm: number;
