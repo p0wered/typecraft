@@ -31,9 +31,7 @@ export function LiveStats({
           transition={{ duration: 0.2 }}
         >
           {mode === "time" ? (
-            <span className={styles.primary}>
-              {Math.ceil(remainingTime)}
-            </span>
+            <span className={styles.primary}>{Math.ceil(remainingTime)}</span>
           ) : (
             <span className={styles.primary}>
               {currentWordIndex} / {totalWords}

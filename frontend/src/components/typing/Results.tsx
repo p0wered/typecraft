@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { AdaptiveRecommendation } from "@typecraft/shared";
 import type { TypingTestResult } from "../../hooks/useTyping";
 import type { KeyMistakes } from "../../utils/typing";
 import { staggerContainer, fadeSlideUp } from "../../utils/motion";
@@ -16,6 +17,9 @@ import styles from "./Results.module.css";
 interface ResultsProps {
   result: TypingTestResult;
   onRestart: () => void;
+  recommendation?: AdaptiveRecommendation | null;
+  isRecommendationLoading?: boolean;
+  onStartRecommendation?: (recommendation: AdaptiveRecommendation) => void;
 }
 
 const KEYBOARD_ROWS = [
@@ -26,7 +30,13 @@ const KEYBOARD_ROWS = [
   ["space", "enter"],
 ];
 
-export function Results({ result, onRestart }: ResultsProps) {
+export function Results({
+  result,
+  onRestart,
+  recommendation,
+  isRecommendationLoading = false,
+  onStartRecommendation,
+}: ResultsProps) {
   const {
     wpm,
     rawWpm,
@@ -116,6 +126,49 @@ export function Results({ result, onRestart }: ResultsProps) {
           </span>
         </div>
         <KeyboardHeatmap mistakes={keyMistakes} />
+      </motion.div>
+
+      <motion.div className={styles.recommendationPanel} variants={fadeSlideUp}>
+        <div className={styles.panelHeader}>
+          <span className={styles.panelTitle}>recommended next test</span>
+          <span className={styles.panelHint}>adaptive difficulty</span>
+        </div>
+        {isRecommendationLoading ? (
+          <p className={styles.noMistakes}>Preparing recommendation...</p>
+        ) : recommendation ? (
+          <div className={styles.recommendationContent}>
+            <div>
+              <h2>{recommendation.title}</h2>
+              <p>{recommendation.description}</p>
+            </div>
+            <div className={styles.recommendationMeta}>
+              <span>{recommendation.mode}</span>
+              <span>{recommendation.modeValue}</span>
+              <span>{recommendation.language}</span>
+              <span>{recommendation.difficulty}</span>
+            </div>
+            <div className={styles.focusTags}>
+              {recommendation.focus.map((focus) => (
+                <span key={focus}>{focus}</span>
+              ))}
+            </div>
+            {recommendation.weakKeys.length > 0 ? (
+              <p className={styles.weakKeys}>
+                weak keys: {recommendation.weakKeys.join(", ")}
+              </p>
+            ) : null}
+            {onStartRecommendation ? (
+              <button
+                className={styles.recommendationBtn}
+                onClick={() => onStartRecommendation(recommendation)}
+              >
+                start recommended test
+              </button>
+            ) : null}
+          </div>
+        ) : (
+          <p className={styles.noMistakes}>No recommendation available yet.</p>
+        )}
       </motion.div>
 
       <motion.div className={styles.grid} variants={fadeSlideUp}>

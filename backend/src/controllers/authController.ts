@@ -27,11 +27,7 @@ export async function register(req: AuthRequest, res: Response) {
 
   const { username, email, password } = parsed.data;
 
-  const existing = db
-    .select()
-    .from(users)
-    .where(eq(users.email, email))
-    .get();
+  const existing = db.select().from(users).where(eq(users.email, email)).get();
 
   if (existing) {
     res.status(409).json({ message: "Email already registered" });
@@ -99,11 +95,7 @@ export async function login(req: AuthRequest, res: Response) {
 }
 
 export function me(req: AuthRequest, res: Response) {
-  const user = db
-    .select()
-    .from(users)
-    .where(eq(users.id, req.userId!))
-    .get();
+  const user = db.select().from(users).where(eq(users.id, req.userId!)).get();
 
   if (!user) {
     res.status(404).json({ message: "User not found" });

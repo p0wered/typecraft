@@ -55,6 +55,16 @@
   box-shadow: var(--shadow-sm);
 }
 
+.recommendationPanel {
+  background: linear-gradient(135deg, var(--bg-surface), var(--accent-soft));
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
 .panelHeader {
   display: flex;
   align-items: baseline;
@@ -126,6 +136,61 @@
   font-size: 0.85rem;
   text-align: center;
   padding: 1rem 0;
+}
+
+.recommendationContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.recommendationContent h2 {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+
+.recommendationContent p {
+  color: var(--text-secondary);
+}
+
+.recommendationMeta,
+.focusTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.recommendationMeta span,
+.focusTags span {
+  background-color: var(--bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.focusTags span {
+  color: var(--text-primary);
+}
+
+.weakKeys {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.recommendationBtn {
+  align-self: flex-start;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  border: none;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
 }
 
 .grid {
@@ -230,6 +295,10 @@
     padding: 0.9rem;
   }
 
+  .recommendationPanel {
+    padding: 0.9rem;
+  }
+
   .panelHeader {
     flex-direction: column;
     gap: 0.25rem;
@@ -285,6 +354,10 @@
   }
 
   .restartBtn {
+    width: 100%;
+  }
+
+  .recommendationBtn {
     width: 100%;
   }
 }

@@ -2,14 +2,19 @@ import type { TypingMode } from "@typecraft/shared";
 import { useI18n, type TranslationKey } from "../../utils/i18n";
 import styles from "./ModeBar.module.css";
 
-const MODES: { id: TypingMode; labelKey: `mode.${TypingMode}` }[] = [
+type BuiltInTypingMode = Exclude<TypingMode, "custom">;
+
+const MODES: {
+  id: BuiltInTypingMode;
+  labelKey: `mode.${BuiltInTypingMode}`;
+}[] = [
   { id: "words", labelKey: "mode.words" },
   { id: "time", labelKey: "mode.time" },
   { id: "quote", labelKey: "mode.quote" },
   { id: "code", labelKey: "mode.code" },
 ];
 
-const MODE_OPTIONS: Record<TypingMode, string[]> = {
+const MODE_OPTIONS: Record<BuiltInTypingMode, string[]> = {
   words: ["10", "25", "50", "100"],
   time: ["15", "30", "60", "120"],
   quote: ["short", "medium", "long"],
@@ -41,7 +46,8 @@ export function ModeBar({
   onLanguageChange,
 }: ModeBarProps) {
   const { t } = useI18n();
-  const options = MODE_OPTIONS[mode];
+  const builtInMode: BuiltInTypingMode = mode === "custom" ? "words" : mode;
+  const options = MODE_OPTIONS[builtInMode];
   const showLanguage = mode === "words" || mode === "time" || mode === "quote";
 
   return (
@@ -65,7 +71,7 @@ export function ModeBar({
             className={`${styles.btn} ${modeValue === option ? styles.active : ""}`}
             onClick={() => onValueChange(option)}
           >
-            {mode === "quote" && OPTION_LABELS[option]
+            {builtInMode === "quote" && OPTION_LABELS[option]
               ? t(OPTION_LABELS[option])
               : option}
           </button>

@@ -36,6 +36,24 @@ export const results = sqliteTable("results", {
     .default(sql`(datetime('now'))`),
 });
 
+export const customTexts = sqliteTable("custom_texts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  contentType: text("content_type").notNull(),
+  language: text("language").notNull(),
+  isPublic: integer("is_public", { mode: "boolean" }).notNull().default(false),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(datetime('now'))`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`(datetime('now'))`),
+});
+
 export const userSettings = sqliteTable("user_settings", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id")

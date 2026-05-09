@@ -1,7 +1,4 @@
-import type {
-  UpdateSettingsRequest,
-  UserSettings,
-} from "@typecraft/shared";
+import type { UpdateSettingsRequest, UserSettings } from "@typecraft/shared";
 import { api } from "./api";
 
 export const settingsApi = {

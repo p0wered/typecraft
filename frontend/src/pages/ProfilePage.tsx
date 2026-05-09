@@ -66,6 +66,7 @@ export function ProfilePage() {
     { value: "time", label: t("mode.time") },
     { value: "quote", label: t("mode.quote") },
     { value: "code", label: t("mode.code") },
+    { value: "custom", label: t("mode.custom") },
   ];
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { results } from "../db/schema.js";
 import type { AuthRequest } from "../middleware/auth.js";
 
 const createResultSchema = z.object({
-  mode: z.enum(["words", "time", "quote", "code"]),
+  mode: z.enum(["words", "time", "quote", "code", "custom"]),
   modeValue: z.string(),
   language: z.string(),
   wpm: z.number().min(0),
@@ -116,7 +116,7 @@ export function getProgress(req: AuthRequest, res: Response) {
 }
 
 export function getPersonalBest(req: AuthRequest, res: Response) {
-  const modes = ["words", "time", "quote", "code"] as const;
+  const modes = ["words", "time", "quote", "code", "custom"] as const;
   const personalBests = [];
 
   for (const mode of modes) {

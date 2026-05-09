@@ -1,4 +1,4 @@
-export type TypingMode = "words" | "time" | "quote" | "code";
+export type TypingMode = "words" | "time" | "quote" | "code" | "custom";
 
 export interface TypingResult {
   id: number;

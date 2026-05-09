@@ -8,6 +8,7 @@ import styles from "./Header.module.css";
 const NAV_ITEMS = [
   { path: "/", labelKey: "nav.typing" },
   { path: "/profile", labelKey: "nav.profile" },
+  { path: "/custom", labelKey: "nav.custom" },
   { path: "/settings", labelKey: "nav.settings" },
 ] as const;
 

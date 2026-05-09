@@ -16,6 +16,28 @@ export type {
 } from "./results";
 
 export type {
+  CustomText,
+  CustomTextContentType,
+  CreateCustomTextRequest,
+  UpdateCustomTextRequest,
+  CustomTextsQuery,
+} from "./customTexts";
+
+export type {
+  LeaderboardQuery,
+  LeaderboardEntry,
+  WeeklyLeaderboardResponse,
+} from "./leaderboards";
+
+export type {
+  AdaptiveDifficulty,
+  AdaptiveFocus,
+  AdaptiveRecentResult,
+  AdaptiveRecommendationRequest,
+  AdaptiveRecommendation,
+} from "./adaptive";
+
+export type {
   UserSettings,
   UpdateSettingsRequest,
   Theme,
