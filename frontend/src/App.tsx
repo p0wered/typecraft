@@ -6,6 +6,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { LoginPage } from "./pages/LoginPage";
 import { CustomTextsPage } from "./pages/CustomTextsPage";
+import { LeaderboardsPage } from "./pages/LeaderboardsPage";
 import { useAuthBootstrap } from "./hooks/useAuthBootstrap";
 import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useSettingsStore } from "./store/settingsStore";
@@ -30,6 +31,7 @@ export function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/custom" element={<CustomTextsPage />} />
+        <Route path="/leaderboards" element={<LeaderboardsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Route>

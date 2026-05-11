@@ -19,7 +19,7 @@
 5. ✅ Фаза 5: structured AI recommendations через AI provider abstraction.
 6. ✅ Фаза 6: AI-generated adaptive tests.
 7. ⬜ Фаза 7: адаптация imported/custom texts через AI.
-8. ⬜ Фаза 8: weekly leaderboards MVP.
+8. ✅ Фаза 8: weekly leaderboards MVP.
 9. ⬜ Фаза 9: weekly leaderboards integration.
 10. ⬜ Фаза 10: ghost race как низкоприоритетное future-направление.
 

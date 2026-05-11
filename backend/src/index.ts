@@ -7,6 +7,7 @@ import resultsRoutes from "./routes/results.js";
 import settingsRoutes from "./routes/settings.js";
 import customTextsRoutes from "./routes/customTexts.js";
 import adaptiveRoutes from "./routes/adaptive.js";
+import leaderboardsRoutes from "./routes/leaderboards.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { db } from "./db/index.js";
 import { sql } from "drizzle-orm";
@@ -22,6 +23,7 @@ app.use("/api/results", resultsRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/custom-texts", customTextsRoutes);
 app.use("/api/adaptive", adaptiveRoutes);
+app.use("/api/leaderboards", leaderboardsRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
