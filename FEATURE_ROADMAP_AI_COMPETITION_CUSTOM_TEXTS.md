@@ -17,7 +17,7 @@
 3. ✅ Фаза 3: custom texts UX и file import.
 4. ✅ Фаза 4: adaptive recommendation foundation с локальным fallback.
 5. ✅ Фаза 5: structured AI recommendations через AI provider abstraction.
-6. ⬜ Фаза 6: AI-generated adaptive tests.
+6. ✅ Фаза 6: AI-generated adaptive tests.
 7. ⬜ Фаза 7: адаптация imported/custom texts через AI.
 8. ⬜ Фаза 8: weekly leaderboards MVP.
 9. ⬜ Фаза 9: weekly leaderboards integration.
@@ -708,9 +708,9 @@ Prompt должен требовать:
 
 ---
 
-## Фаза 6. AI-generated Adaptive Tests ⬜
+## Фаза 6. AI-generated Adaptive Tests ✅
 
-Статус: не выполнено. Делать после structured AI recommendations.
+Статус: выполнено. Расширены AI prompt и клиентский цикл: `generatedContent` с препросмотром, запуск упражнения как ephemeral custom текст, сохранение в custom texts для авторизованных пользователей, regenerate через `regenerateFromContent`, при отсутствии ИИ — прежний локальный fallback без сгенерированного текста.
 
 ### Цель
 

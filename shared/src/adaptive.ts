@@ -28,6 +28,10 @@ export interface AdaptiveRecommendationRequest {
     fontSize?: number;
   };
   availableModes?: TypingMode[];
+  /** When repeating challenge generation — ask for a noticeably different drill. */
+  regenerateFromContent?: string;
+  /** Excerpt from user-owned material for a paraphrased drill (avoid long verbatim copying). */
+  sourceMaterialExcerpt?: string;
 }
 
 export interface AdaptiveRecommendation {

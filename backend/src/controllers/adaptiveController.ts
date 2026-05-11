@@ -28,6 +28,8 @@ const adaptiveRequestSchema = z.object({
     })
     .optional(),
   availableModes: z.array(typingModeSchema).optional(),
+  regenerateFromContent: z.string().max(4000).optional(),
+  sourceMaterialExcerpt: z.string().max(12000).optional(),
 });
 
 export async function getAdaptiveRecommendation(

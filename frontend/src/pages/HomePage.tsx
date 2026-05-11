@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type {
   AdaptiveRecommendation,
+  AdaptiveRecommendationRequest,
   CustomText,
   TypingMode,
 } from "@typecraft/shared";
@@ -19,7 +20,12 @@ import { useResultsStore } from "../store/resultsStore";
 import { useAuthStore } from "../store/authStore";
 import { resultsApi } from "../services/results";
 import { adaptiveApi } from "../services/adaptive";
+import { customTextsApi } from "../services/customTexts";
 import { useI18n } from "../utils/i18n";
+import {
+  ephemeralCustomTextFromRecommendation,
+  isAdaptiveChallengeCodeLike,
+} from "../utils/adaptiveChallenge";
 import {
   isContentLength,
   isProgrammingLanguage,
@@ -55,13 +61,20 @@ export function HomePage() {
   const [recommendation, setRecommendation] =
     useState<AdaptiveRecommendation | null>(null);
   const [isRecommendationLoading, setIsRecommendationLoading] = useState(false);
+  const [isChallengeRegenerating, setIsChallengeRegenerating] = useState(false);
+  const [isSavingChallenge, setIsSavingChallenge] = useState(false);
+  const [adaptiveFeedback, setAdaptiveFeedback] = useState<string | null>(null);
 
   const resetRef = useRef<() => void>(() => {});
+  const lastAdaptiveRequestRef = useRef<AdaptiveRecommendationRequest | null>(
+    null,
+  );
 
   const handleFinish = useCallback(
     (result: TypingTestResult) => {
       setFinalResult(result);
       setRecommendation(null);
+      setAdaptiveFeedback(null);
       const payload = {
         mode,
         modeValue,
@@ -83,30 +96,41 @@ export function HomePage() {
         });
       }
       setIsRecommendationLoading(true);
+
+      const sourceMaterialExcerpt =
+        mode === "custom" && customText?.content
+          ? customText.content.slice(0, 8000)
+          : undefined;
+
+      const adaptiveBody: AdaptiveRecommendationRequest = {
+        recentResults: [
+          {
+            mode,
+            modeValue,
+            language: payload.language,
+            wpm: result.wpm,
+            accuracy: result.accuracy,
+            consistency: result.consistency,
+            keyMistakes: result.keyMistakes,
+            createdAt: new Date().toISOString(),
+          },
+        ],
+        currentSettings: { preferredLanguage: typingLanguage },
+        availableModes: ["words", "time", "quote", "code"],
+        sourceMaterialExcerpt,
+      };
+
+      lastAdaptiveRequestRef.current = adaptiveBody;
+
       adaptiveApi
-        .recommendation({
-          recentResults: [
-            {
-              mode,
-              modeValue,
-              language: payload.language,
-              wpm: result.wpm,
-              accuracy: result.accuracy,
-              consistency: result.consistency,
-              keyMistakes: result.keyMistakes,
-              createdAt: new Date().toISOString(),
-            },
-          ],
-          currentSettings: { preferredLanguage: typingLanguage },
-          availableModes: ["words", "time", "quote", "code"],
-        })
+        .recommendation(adaptiveBody)
         .then(setRecommendation)
         .catch((err) => {
           console.error("Failed to get adaptive recommendation:", err);
         })
         .finally(() => setIsRecommendationLoading(false));
     },
-    [mode, modeValue, typingLanguage, addResult, isAuthenticated],
+    [mode, modeValue, typingLanguage, customText, addResult, isAuthenticated],
   );
 
   const testKey = useMemo(
@@ -117,13 +141,79 @@ export function HomePage() {
   const handleRestart = useCallback(() => {
     setFinalResult(null);
     setRecommendation(null);
+    setAdaptiveFeedback(null);
+    setIsChallengeRegenerating(false);
+    setIsSavingChallenge(false);
+    lastAdaptiveRequestRef.current = null;
     resetRef.current();
   }, []);
+
+  const handleRegenerateChallenge = useCallback(() => {
+    const base = lastAdaptiveRequestRef.current;
+    if (!base || !recommendation?.generatedContent?.trim()) return;
+    const priorContent = recommendation.generatedContent;
+    setIsChallengeRegenerating(true);
+    setAdaptiveFeedback(null);
+    adaptiveApi
+      .recommendation({
+        ...base,
+        regenerateFromContent: priorContent,
+      })
+      .then((next) => {
+        setRecommendation((prev) => ({
+          ...next,
+          generatedContent: next.generatedContent ?? prev?.generatedContent,
+        }));
+      })
+      .catch((err) => {
+        console.error("Failed to regenerate adaptive challenge:", err);
+        setAdaptiveFeedback(t("results.adaptiveSaveError"));
+      })
+      .finally(() => setIsChallengeRegenerating(false));
+  }, [recommendation, t]);
+
+  const handleSaveChallengeAsCustomText = useCallback(
+    async (next: AdaptiveRecommendation) => {
+      const content = next.generatedContent?.trim();
+      if (!content) return;
+      if (!isAuthenticated) {
+        setAdaptiveFeedback(t("results.adaptiveNeedLogin"));
+        return;
+      }
+      setAdaptiveFeedback(null);
+      setIsSavingChallenge(true);
+
+      const isCode = isAdaptiveChallengeCodeLike(next);
+
+      try {
+        await customTextsApi.create({
+          title: next.title.slice(0, 200),
+          content,
+          contentType: isCode ? "code" : "text",
+          language: next.language,
+          isPublic: false,
+        });
+        setAdaptiveFeedback(t("results.adaptiveSaved"));
+      } catch (error) {
+        console.error("Failed to save adaptive challenge:", error);
+        setAdaptiveFeedback(t("results.adaptiveSaveError"));
+      } finally {
+        setIsSavingChallenge(false);
+      }
+    },
+    [isAuthenticated, t],
+  );
 
   const handleStartRecommendation = useCallback(
     (next: AdaptiveRecommendation) => {
       setRecommendation(null);
       setFinalResult(null);
+      setAdaptiveFeedback(null);
+      const inline = next.generatedContent?.trim();
+      if (inline) {
+        setCustomText(ephemeralCustomTextFromRecommendation(next));
+        return;
+      }
       setCustomText(null);
       setMode(next.mode);
       setModeValue(next.modeValue);
@@ -167,6 +257,15 @@ export function HomePage() {
               recommendation={recommendation}
               isRecommendationLoading={isRecommendationLoading}
               onStartRecommendation={handleStartRecommendation}
+              onRegenerateChallenge={
+                recommendation?.generatedContent?.trim()
+                  ? handleRegenerateChallenge
+                  : undefined
+              }
+              isRegeneratingChallenge={isChallengeRegenerating}
+              onSaveChallengeAsCustomText={handleSaveChallengeAsCustomText}
+              isSavingChallenge={isSavingChallenge}
+              adaptiveFeedback={adaptiveFeedback}
             />
           </motion.div>
         ) : (

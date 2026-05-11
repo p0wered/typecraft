@@ -53,7 +53,15 @@ function buildPrompt(
 ) {
   return JSON.stringify({
     instruction:
-      "Return only valid JSON for the next typing test recommendation. Do not include markdown. Keep difficulty changes gradual. Use only the allowed focus values and typing modes. Do not include personal data.",
+      "Return only valid JSON for the next typing test recommendation. Do not include markdown. Keep difficulty changes gradual. Use only the allowed focus values and typing modes. Do not include personal data, slurs, or unsafe instructions.",
+    adaptiveChallengeHints: [
+      "When focus contains weak_keys and weakKeys lists letters or symbols: set generatedContent to a short prose passage (~200–1200 chars) that naturally repeats those characters many times across normal words.",
+      "When focus contains punctuation or code_structure, or fallback.mode is code: set generatedContent to a SHORT code snippet (~3–25 lines). Use plain ASCII typing characters and typical braces/parens/semicolons. It does NOT need to compile.",
+      "When sourceMaterialExcerpt is present: summarize and paraphrase into a NEW typing passage (~350–900 chars). Do NOT copy long contiguous stretches from it.",
+      "If regenerateFromContent is present: produced generatedContent MUST be noticeably different while keeping the same training intent.",
+      "generatedContent MUST stay under the character limits in the schema. Omit generatedContent ONLY if impossible to satisfy safely.",
+      "Prefer the language indicated by fallback.language.",
+    ],
     allowedModes: request.availableModes ?? [
       "words",
       "time",
@@ -81,8 +89,18 @@ function buildPrompt(
       generatedContent: "optional text, max 4000 chars",
       customTextId: "optional number",
     },
+    regeneration: request.regenerateFromContent
+      ? { previousChallenge: request.regenerateFromContent.slice(0, 2000) }
+      : undefined,
+    adaptationSource: request.sourceMaterialExcerpt
+      ? request.sourceMaterialExcerpt.slice(0, 9000)
+      : undefined,
     fallback,
-    input: request,
+    input: {
+      recentResults: request.recentResults,
+      currentSettings: request.currentSettings,
+      availableModes: request.availableModes,
+    },
   });
 }
 
@@ -141,7 +159,7 @@ export async function generateAiAdaptiveRecommendation(
           content: buildPrompt(request, fallback),
         },
       ],
-      temperature: 0.4,
+      temperature: request.regenerateFromContent ? 0.55 : 0.4,
     }),
   });
 

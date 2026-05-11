@@ -15,4 +15,7 @@ const sqlite = new Database(DB_PATH);
 sqlite.pragma("journal_mode = WAL");
 sqlite.pragma("foreign_keys = ON");
 
+/** Raw better-sqlite3 handle for SQL the ORM does not model (e.g. window functions). */
+export const rawSqlite = sqlite;
+
 export const db = drizzle(sqlite, { schema });

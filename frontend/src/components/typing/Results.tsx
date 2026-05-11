@@ -12,6 +12,7 @@ import type { AdaptiveRecommendation } from "@typecraft/shared";
 import type { TypingTestResult } from "../../hooks/useTyping";
 import type { KeyMistakes } from "../../utils/typing";
 import { staggerContainer, fadeSlideUp } from "../../utils/motion";
+import { useI18n } from "../../utils/i18n";
 import styles from "./Results.module.css";
 
 interface ResultsProps {
@@ -20,6 +21,13 @@ interface ResultsProps {
   recommendation?: AdaptiveRecommendation | null;
   isRecommendationLoading?: boolean;
   onStartRecommendation?: (recommendation: AdaptiveRecommendation) => void;
+  onRegenerateChallenge?: () => void;
+  isRegeneratingChallenge?: boolean;
+  onSaveChallengeAsCustomText?: (
+    recommendation: AdaptiveRecommendation,
+  ) => void;
+  isSavingChallenge?: boolean;
+  adaptiveFeedback?: string | null;
 }
 
 const KEYBOARD_ROWS = [
@@ -36,7 +44,13 @@ export function Results({
   recommendation,
   isRecommendationLoading = false,
   onStartRecommendation,
+  onRegenerateChallenge,
+  isRegeneratingChallenge = false,
+  onSaveChallengeAsCustomText,
+  isSavingChallenge = false,
+  adaptiveFeedback = null,
 }: ResultsProps) {
+  const { t } = useI18n();
   const {
     wpm,
     rawWpm,
@@ -50,6 +64,9 @@ export function Results({
     wpmHistory,
     keyMistakes,
   } = result;
+
+  const generatedContent = recommendation?.generatedContent?.trim();
+  const canUseAiChallenge = Boolean(generatedContent && onStartRecommendation);
 
   return (
     <motion.div
@@ -130,11 +147,15 @@ export function Results({
 
       <motion.div className={styles.recommendationPanel} variants={fadeSlideUp}>
         <div className={styles.panelHeader}>
-          <span className={styles.panelTitle}>recommended next test</span>
-          <span className={styles.panelHint}>adaptive difficulty</span>
+          <span className={styles.panelTitle}>
+            {t("results.adaptiveRecommendedTitle")}
+          </span>
+          <span className={styles.panelHint}>
+            {t("results.adaptiveRecommendedHint")}
+          </span>
         </div>
         {isRecommendationLoading ? (
-          <p className={styles.noMistakes}>Preparing recommendation...</p>
+          <p className={styles.noMistakes}>{t("results.adaptivePrepare")}</p>
         ) : recommendation ? (
           <div className={styles.recommendationContent}>
             <div>
@@ -154,20 +175,69 @@ export function Results({
             </div>
             {recommendation.weakKeys.length > 0 ? (
               <p className={styles.weakKeys}>
-                weak keys: {recommendation.weakKeys.join(", ")}
+                {t("results.adaptiveWeakKeysPrefix")}{" "}
+                {recommendation.weakKeys.join(", ")}
               </p>
             ) : null}
+
+            {generatedContent ? (
+              <div className={styles.generatedBlock}>
+                <span className={styles.generatedLabel}>
+                  {t("results.adaptivePreview")}
+                </span>
+                <pre className={styles.generatedPreview}>
+                  {generatedContent}
+                </pre>
+                {(onRegenerateChallenge || onSaveChallengeAsCustomText) && (
+                  <div className={styles.challengeRow}>
+                    {onRegenerateChallenge ? (
+                      <button
+                        type="button"
+                        className={styles.secondaryBtn}
+                        disabled={isRegeneratingChallenge}
+                        onClick={onRegenerateChallenge}
+                      >
+                        {isRegeneratingChallenge
+                          ? t("results.adaptiveRegenerating")
+                          : t("results.adaptiveRegenerate")}
+                      </button>
+                    ) : null}
+                    {onSaveChallengeAsCustomText ? (
+                      <button
+                        type="button"
+                        className={styles.secondaryBtn}
+                        disabled={isSavingChallenge}
+                        onClick={() =>
+                          onSaveChallengeAsCustomText(recommendation)
+                        }
+                      >
+                        {isSavingChallenge
+                          ? t("results.adaptiveSaving")
+                          : t("results.adaptiveSaveCustom")}
+                      </button>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {adaptiveFeedback ? (
+              <p className={styles.adaptiveFeedback}>{adaptiveFeedback}</p>
+            ) : null}
+
             {onStartRecommendation ? (
               <button
                 className={styles.recommendationBtn}
                 onClick={() => onStartRecommendation(recommendation)}
               >
-                start recommended test
+                {canUseAiChallenge
+                  ? t("results.adaptiveStartDrill")
+                  : t("results.adaptiveStartRecommended")}
               </button>
             ) : null}
           </div>
         ) : (
-          <p className={styles.noMistakes}>No recommendation available yet.</p>
+          <p className={styles.noMistakes}>{t("results.adaptiveNoneYet")}</p>
         )}
       </motion.div>
 

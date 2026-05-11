@@ -56,4 +56,24 @@ describe("validateAiRecommendation", () => {
 
     expect(recommendation).toBeNull();
   });
+
+  it("accepts optional generatedContent within limits", () => {
+    const recommendation = validateAiRecommendation(
+      {
+        mode: "code",
+        modeValue: "typescript",
+        language: "typescript",
+        difficulty: "normal",
+        focus: ["punctuation"],
+        weakKeys: [";", "}"],
+        title: "Punctuation snippet",
+        description: "Type a short punctuation-heavy snippet.",
+        generatedContent:
+          "// drill\nexport function ping() {\n  return `{ok:true}`;\n}\nfunction x() {}",
+      },
+      { recentResults: [] },
+    );
+
+    expect(recommendation?.generatedContent).toContain("function");
+  });
 });
