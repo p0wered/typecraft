@@ -94,40 +94,43 @@ export function Results({
           >
             <defs>
               <linearGradient id="wpmGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.35} />
-                <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.35} />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="rgba(255,255,255,0.05)"
+              stroke="var(--text-tertiary)"
+              strokeOpacity={0.35}
             />
             <XAxis
               dataKey="sec"
-              tick={{ fill: "#5a5a6e", fontSize: 12 }}
-              stroke="rgba(255,255,255,0.08)"
+              tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+              stroke="var(--text-tertiary)"
+              strokeOpacity={0.5}
             />
             <YAxis
-              tick={{ fill: "#5a5a6e", fontSize: 12 }}
-              stroke="rgba(255,255,255,0.08)"
+              tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+              stroke="var(--text-tertiary)"
+              strokeOpacity={0.5}
             />
             <Tooltip
               contentStyle={{
-                background: "#1a1a23",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--text-tertiary)",
                 borderRadius: 8,
                 fontFamily: "var(--font-mono)",
                 fontSize: 12,
               }}
-              labelStyle={{ color: "#5a5a6e" }}
-              itemStyle={{ color: "#e2e0dc" }}
+              labelStyle={{ color: "var(--text-secondary)" }}
+              itemStyle={{ color: "var(--text-primary)" }}
               labelFormatter={(v) => `${v}s`}
               formatter={(value: number) => [Math.round(value), "wpm"]}
             />
             <Area
               type="monotone"
               dataKey="wpm"
-              stroke="#7c3aed"
+              stroke="var(--accent)"
               strokeWidth={2}
               fill="url(#wpmGrad)"
             />
