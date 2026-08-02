@@ -85,3 +85,8 @@ typecraft/
 ├── shared/     Общие TypeScript-типы
 └── package.json
 ```
+
+## Скриншоты
+
+![screen-1.png](.github/assets/screen-1.png)
+![screen-2.png](.github/assets/screen-2.png)
